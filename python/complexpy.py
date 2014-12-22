@@ -1,5 +1,4 @@
-
-import math, objfunc,sys,random
+import math,sys,random
 import numpy as np
 import sampling as sample_vector
 import pdb
@@ -18,7 +17,7 @@ def firstChecks(xlowr,xupr,xlowc,xupc):
     checkok = True
     return checkok
     
-def complexpy_(obj,xlow,xup):
+def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     """ The complexrf method implemented in python -- 
     
     References
@@ -38,7 +37,7 @@ def complexpy_(obj,xlow,xup):
     # Constants to be used in the complex algorithm
     
     # Reflection Distance
-    Alfa = 1.1                  
+    Alfa = 1.3
     
     # Maximum number of iterations for the correcting the reflection point.
     IterMax=30                  
@@ -88,7 +87,7 @@ def complexpy_(obj,xlow,xup):
     if Nparams == int(1):
 		k=3;   
     else:
-		k=3*Nparams;      
+		k=2*Nparams;      
         
     kf = 1 - math.pow((Alfa/2),(Gamma/k))
 
@@ -106,25 +105,30 @@ def complexpy_(obj,xlow,xup):
         
     # Create a random vector, within the limits, to start the optimization Process (x
     # this can be changed into a seperate function depending on the type of input
+    # pdb.set_trace()
+    if samplingmethod == "LHS":
+      x = sample_vector.Sample_LHC(xlow,xup,k)
+    elif samplingmethod == "Debug":
+      x = sample_vector.Sample_Debug(xlow,xup,k)
+    else:
+       x=sample_vector.Sample_Uniform(xlow,xup,k)
     
-    x=sample_vector.Sample_LHC(xlow,xup,k)
     allx=x.copy()
+    
     # This is the starting value of complex method -- I will have to change this to a function. Modularize!
     NoEvals=k
     f=np.zeros([k,1])
     for i in range(0,x.shape[0]):
 		 f[i,0]=complex_func(obj,np.array(x[i,:]))
-
-
-    #pdb.set_trace()	 
-    allf=f.copy()
+   
+     
+    allf=f
     #Block 2    
-    fworstind,fbestind =f.argmax(), f.argmin()
+    fworstind,fbestind =f.argmax(),f.argmin()
     
     xworst,xbest=x[fworstind,:],x[fbestind,:]
     xmin=xbest   
-    
-    
+        
     fmin,fmax = f[fbestind,0],f[fworstind,0]
     fminV=fmin
     
@@ -132,11 +136,10 @@ def complexpy_(obj,xlow,xup):
             conv_cond = 1 ;             print "Done- No need to Optimize fmin=0",abs(abs(fmax)-abs(fmin))                         
     if abs(abs(fmax)-abs(fmin))/abs(fmin) <= TolFunc:    
         conv_cond = 1;         print "Done -- No need to Optimize ",abs(abs(fmax)-abs(fmin))
-    else: print "Complex Method Started"
+    #else: print "Complex Method Started"; print
       
     while NoEvals < MaxEvals and conv_cond == 0:
         #print "NoEvals",NoEvals,"and fmin is ",fmin,"with x is ",xmin
-        #pdb.set_trace()
         #Increase all f-values with a factor kf. This is the forgetting principle.
         f = f + (fmax-fmin)*kf;
 
@@ -155,7 +158,7 @@ def complexpy_(obj,xlow,xup):
         x_1=Rfak*(l1.item(l1.argmax())*(xup-xlow))*ri + x_1
 
         # Checking the point, whether it is in the limits or not
-        # Can i Write a seperate function for this. Is it needed?
+        # Is it possible to write a seperate function for this. Is it needed?
         x_2 = x_1.copy()
         truth = x_1<xlow; #print truth,"\n"
         truthla= np.array([truth])
@@ -173,18 +176,22 @@ def complexpy_(obj,xlow,xup):
             if  a1[i]:    
                 xnew[0,i] = xup[0,i] 
         
-        x[fworstind]=xnew[0,:].copy() # Update the x
+        x[fworstind]=xnew[0,:] # Update the x
 
         # Updating f with the reflected point
         f[fworstind,0]=complex_func(obj,xnew[0,:])
-        
+        NoEvals=NoEvals+1
+
         # New function index calculation
         fworstind_new =f.argmax()
         fbestind_new  =f.argmin() 
         
         #Block 3 
         itera=1
+        #pdb.set_trace()
         while (fworstind_new == fworstind) and (itera < IterMax) and (NoEvals < MaxEvals):  
+            #print "Inside while loop 2"
+            #print fworstind_new == fworstind
             a = 1 - math.exp(-1.0*itera/b)
             xnew_ = ((xc*(1.0-a) + x[fworstind_new,:]*a) + xnew)/2.0
             
@@ -206,8 +213,9 @@ def complexpy_(obj,xlow,xup):
             
             #print xnew2,"\n"    xnew2 is pretty much the result of checking if it is within the design limits
 
-            x[fworstind_new]=xnew2[0,:].copy()
+            x[fworstind_new]=xnew2[0,:]
             xnew=xnew2;     
+
             # Updating f with the reflected point
             f[fworstind_new,0]=complex_func(obj,xnew2[0,:])
             allf=np.vstack((allf,f[fworstind_new,0]))
@@ -218,49 +226,50 @@ def complexpy_(obj,xlow,xup):
             fbestind_new  =f.argmin() 
             
             itera=itera+1            
-            
+            #print fworstind_new == fworstind
             if fmin > f[fworstind_new,0]: # Not needed in this while loop
-                fmin = f[fworstind_new,0].copy()
-                xmin= x[fworstind_new,:].copy();
+                #print "fmin",fmin
+                fmin = f[fworstind_new,0]
+                xmin= x[fworstind_new,:]
 
             #raw_input("Press Enter to continue...")
         
         fworstind,fbestind=f.argmax(),f.argmin()
                    
-        fmin,fmax= f[f.argmin(),0],f[f.argmin(),0]
+        fmin,fmax= f[f.argmin(),0],f[f.argmax(),0]
         
         xworst,xbest= x[fworstind,:],x[fbestind,:] 
         xmin=xbest.copy() 
         
         fminV= np.vstack((fminV,fmin))
-        Iterations = Iterations + 1; # Not implemented either
-        NoEvals=NoEvals+1
+        #Iterations = Iterations + 1; # Not implemented either
+        #NoEvals=NoEvals+1
         allf=np.vstack((allf,fmin))
         
-        if fmin == 0:
-            if abs(abs(fmax)-abs(fmin)) <= TolFunc:
-                conv_cond = 1 ;           #  print "Done"                         
+        #if fmin == 0:
+        if abs(abs(fmax)-abs(fmin)) <= TolFunc:
+                conv_cond = 1 ;             print "Done 1"                         
         elif abs(abs(fmax)-abs(fmin))/abs(fmin) <= TolFunc:
-            conv_cond = 1 ;            # print "Done"  
+            conv_cond = 1 ;             print "Done 2"  
         
-    fmin=complex_func(obj,np.array(xmin))    
+    fmin=complex_func(obj,np.array(xmin))    # this does not make any sense here either
+    print NoEvals
     return xmin,fmin,fminV,allf
     
-def apply(func, xlow, xup): # 1
-     return complexpy_(func,xlow,xup) # 2
+def apply(func, xlow, xup ,samplingmethod="LHC"): # 1
+     return complexpy_(func,xlow,xup,samplingmethod="LHC") # 2
          
 if __name__=="__main__":
+  import objfunc
   funcname=objfunc.install
-  xlow=np.array([[-5,-5,-5]])
-  xup=np.array([[5,5,5]])
-  n=xlow.shape[1]
-  count=1
+  xlow=np.array([[-5,-5]])
+  xup=np.array([[5,5]])
   
   for i in range(1):
-    xmin,fmin,funcVector,allf= apply(funcname,xlow,xup)
+    xmin,fmin,funcVector,allf= apply(funcname,xlow,xup,samplingmethod="LHC")
     #print i+1
-    print "i,xmin,fmin, allf.shape[0],Hit count = , count"
-    print i,xmin,fmin, allf.shape[0],"Hit count = ", count
+    #print "i,xmin,fmin, allf.shape[0],Hit count = , count"
+    print i,xmin,fmin,funcVector.shape[1]
     #if abs(fmin)<1e-4:
         #print i,xmin,fmin, allf.shape[0],"Hit count = ", count
      #   count=count+1
