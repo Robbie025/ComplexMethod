@@ -19,46 +19,40 @@ def Sample_LHC(xlow=np.array([[-5,-1,1]]),xup=np.array([[5,1,5]]),k=10,shuffle=T
     # print "Latin Hypercube Sampling"
     xlowr,xlowc = xlow.shape[0],xlow.shape[1]   
     xupr,xupc = xup.shape[0],xup.shape[1]
-
-    segsize=(xup-xlow)/float(k) 
-    xlow_=xlow
-    xup_=xlow
     x=np.zeros((k,xlowc))
-    
-    for i in range(k): 
-           xup_=xlow+segsize*(i+1);  
-           a=random.uniform(xlow_,xup_)
-           xlow_=xup_ 
-           x[i,:]=a
+    step1 = [np.linspace(xlow.item(i),xup.item(i),k+1) for i in range(xlow.shape[1])]
+    step2=np.array(step1).T
+    for j in range(k):
+        xlow_,xup_ = step2[j,],step2[j+1,]
+        mylist = [random.uniform(xlow_.item(i),xup_.item(i)) for i in range(xlow.shape[1])]
+        x[j,]=mylist 
     if shuffle:
 		np.random.shuffle(x)
 		return x
     else: 
 		return x
 
+
 def Sample_debug(xlow=np.array([[-5,-1,1]]),xup=np.array([[5,1,5]]),k=10):
     # print "Same Sample returned -- for debug purposes"
     xlowr,xlowc = xlow.shape[0],xlow.shape[1]   
     xupr,xupc = xup.shape[0],xup.shape[1]
-
-    segsize=(xup-xlow)/float(k) 
-    xlow_=xlow
-    xup_=xlow
     x=np.zeros((k,xlowc))
-    
-    for i in range(k): 
-           xup_=xlow+segsize*(i+1);  
-           a=(xlow_+xup_)/2 
-           xlow_=xup_ 
-           x[i,:]=a
+    step1 = [np.linspace(xlow.item(i),xup.item(i),k,endpoint=False) for i in range(xlow.shape[1])]
+    x = np.array(step1).T
     return x
                       
 if __name__=="__main__":
-  #x=Sample_Uniform(xlow=np.array([[-5,-1,-5]]),xup=np.array([[5,1,5]]),k=6)
-  x=Sample_LHC(xlow=np.array([[-5,-5,-5]]),xup=np.array([[5,5,5]]),k=6,shuffle=True)
-  #x=Sample_debug(xlow=np.array([[-5,-5,-5]]),xup=np.array([[5,5,5]]),k=6)
+  xlow=np.array([[-5,-5,-5]])
+  xup=np.array([[5,5,5]])
+  k=10
+  shuffle=False
+  print "Uniform Sampling"
+  x=Sample_Uniform(xlow,xup,k)
   print x
-  #import objfunc2
-  #xlow=np.array([[-5,-5,-5]])
-  #a=map(objfunc2.install,x)
-  #print a
+  x=Sample_LHC(xlow,xup,k,shuffle)
+  print "Lattice Hypercube Sampling"
+  print x 
+  x=Sample_debug(xlow,xup,k)
+  print "Debug mode --  Should give the same values again and again"
+  print x
