@@ -54,8 +54,10 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     IterMax=30                  
     
     # Maximum number of complex iterations
-    MaxEvals=1000                
+    MaxEvals=10000              
     
+    #Maximum number of Iterations of the Complex method
+    IterationsMax=500
     # Constant used when moving the newpoint towards the center and best
     b=4.0                      
     
@@ -76,9 +78,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     # Count of Number of Optimization iteration
     Iterations=0                  
     
-    # Count of Iterations when the reflected point exceeds the limits
-    itera=1           
-               
     fmin=float("inf")
     
     # to be described
@@ -97,7 +96,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     if Nparams == int(1):
 		k=3;   
     else:
-		k=3*Nparams;      
+		k=2*Nparams;      
         
     kf = 1 - math.pow((Alfa/2),(Gamma/k))
 
@@ -114,10 +113,8 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
        #sys.exit()
         
     # Create a random vector, within the limits, to start the optimization Process (x
-    # this can be changed into a seperate function depending on the type of input
-    # pdb.set_trace()
     if samplingmethod == "LHS":
-      x = sample_vector.Sample_LHC(xlow,xup,k)
+      x = sample_vector.Sample_LHC(xlow,xup,k,shuffle=False)
     elif samplingmethod == "Debug":
       x = sample_vector.Sample_Debug(xlow,xup,k)
     else:
@@ -146,12 +143,11 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     if abs(abs(fmax)-abs(fmin))/abs(fmin) <= TolFunc:    
         conv_cond = 1;         print "Done -- No need to Optimize ",abs(abs(fmax)-abs(fmin))
     #else: print "Complex Method Started"; print
-      
-    while NoEvals < MaxEvals and conv_cond == 0:
-        #print "NoEvals",NoEvals,"and fmin is ",fmin,"with x is ",xmin
+     	 
+    while NoEvals < MaxEvals and conv_cond == 0 and Iterations < IterationsMax:
         #Increase all f-values with a factor kf. This is the forgetting principle.
         f = f + (fmax-fmin)*kf;
-
+	Iterations += 1
         # Centroid calculation
         xc_=x.sum(0)
         xc=(xc_-xworst)/(k-1)   
@@ -165,7 +161,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         l1=(xmax-xmin)/(xup-xlow)
         ri = [random.uniform(-0.5,0.5) for _ in range(1,Nparams+1)]
         x_1=Rfak*(l1.item(l1.argmax())*(xup-xlow))*ri + x_1
-        #print "x_1",x_1,x_1.shape
         xnew= checkdesignlimits(xlow,xup,x_1)
         x[fworstind]=xnew[0,:] # Update the x
 
@@ -179,7 +174,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         
         #Block 3 
         itera=1
-        #pdb.set_trace()
         while (fworstind_new == fworstind) and (itera < IterMax) and (NoEvals < MaxEvals):  
             a = 1 - math.exp(-1.0*itera/b)
             xnew_ = ((xc*(1.0-a) + x[fworstind_new,:]*a) + xnew)/2.0
@@ -194,7 +188,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
             
             # Function index calculation
             fworstind_new,fbestind_new =f.argmax(),f.argmin()
-            #fbestind_new  =f.argmin() 
             
             itera=itera+1            
             if fmin > f[fworstind_new,0]: # Not needed in this while loop
@@ -203,25 +196,20 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
 
         
         fworstind,fbestind=f.argmax(),f.argmin()
-                   
-        fmin,fmax= f[f.argmin(),0],f[f.argmax(),0]
-        
+        fmin,fmax= f[fbestind,0],f[fworstind,0]
         xworst,xbest= x[fworstind,:],x[fbestind,:] 
         xmin=xbest.copy() 
         
         fminV= np.vstack((fminV,fmin))
-        #Iterations = Iterations + 1; # Not implemented either
-        #NoEvals=NoEvals+1
         allf=np.vstack((allf,fmin))
         
-        #if fmin == 0:
         if abs(abs(fmax)-abs(fmin)) <= TolFunc:
-                conv_cond = 1 ;             print "Done 1"                         
+                conv_cond = 1 ;          #   print "Done 1"                         
         elif abs(abs(fmax)-abs(fmin))/abs(fmin) <= TolFunc:
-            conv_cond = 1 ;             print "Done 2"  
+            conv_cond = 1 ;           #  print "Done 2"  
         
     fmin=complex_func(obj,np.array(xmin))    # this does not make any sense here either
-    return xmin,fmin,fminV,allf
+    return xmin,fmin,fminV,allf,Iterations
     
 def apply(func, xlow, xup ,samplingmethod="LHC"): # 1
      return complexpy_(func,xlow,xup,samplingmethod="LHC") # 2
