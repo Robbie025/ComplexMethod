@@ -18,20 +18,20 @@ def firstChecks(xlowr,xupr,xlowc,xupc):
     return checkok
 
 def checkdesignlimits(xlow,xup,x):
-    print "x",x
+    #print "x",x
     t = np.array(x<xlow)
-    print "t",t,t.shape[1]
+    #print "t",t,t.shape[1]
     for i in range(t.shape[1]):
-        print "first i",i
+        #print "first i",i
         if t.item(i):
             x[0,i]=xlow[0,i]
-    print "xup"
-    print     
+    #print "xup"
+    #print     
     t1 = np.array(x>xup)
-    print "x",x
-    print "t1",t1,t1.shape[1]
+    #print "x",x
+    #print "t1",t1,t1.shape[1]
     for j in range(t1.shape[1]):
-        print "second i",j,t1.item(j)
+        #print "second i",j,t1.item(j)
         if t1.item(j):
             #print "what",x[0,j],xup[0,j]
             x[0,j]=xup[0,j]; #print "x",x        
@@ -63,13 +63,13 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     IterMax=30                  
     
     # Maximum number of complex iterations
-    MaxEvals=10000                
+    MaxEvals=1000                
     
     # Constant used when moving the newpoint towards the center and best
     b=4.0                      
     
     # Tolerance for function convergence
-    TolFunc = 0.0000001  
+    TolFunc = 0.000001  
     
     # Tolerance for parameter convergence - Not implemented
     TolX = 0.0001               
@@ -107,7 +107,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     if Nparams == int(1):
 		k=3;   
     else:
-		k=2*Nparams;      
+		k=3*Nparams;      
         
     kf = 1 - math.pow((Alfa/2),(Gamma/k))
 
@@ -176,8 +176,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         l1=(xmax-xmin)/(xup-xlow)
         ri = [random.uniform(-0.5,0.5) for _ in range(1,Nparams+1)]
         x_1=Rfak*(l1.item(l1.argmax())*(xup-xlow))*ri + x_1
-        print "x_1",x_1,x_1.shape
-        print 
+        #print "x_1",x_1,x_1.shape
         xnew= checkdesignlimits(xlow,xup,x_1)
         # Checking the point, whether it is in the limits or not
         # Is it possible to write a seperate function for this. Is it needed?
@@ -198,7 +197,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         #    if  a1[i]:    
         #        xnew[0,i] = xup[0,i] 
                 
-        print "after the function",xnew,xnew.shape
+        #print "after the function",xnew,xnew.shape
         x[fworstind]=xnew[0,:] # Update the x
         #print xnew[0,:]
         #print xnewhahaha[0,:]
@@ -222,28 +221,28 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
             xnew_ = ((xc*(1.0-a) + x[fworstind_new,:]*a) + xnew)/2.0
             #print np.array(xnew_), xnew_.shape
             #print
-            xnewhahaha= checkdesignlimits(xlow,xup,np.array(xnew_))
-            x_2N = xnew_.copy()  # Check if it is within the design limits, if not move back:
-            truth = x_2N<xlow;  
-            truthla= np.array([truth])
-            a1=np.array(truthla[0,0]);
-            for i in range(len(a1)):
-                if  a1[i]:    
-                    x_2N[0,i] = xlow[0,i]
-                
-            xnew2=x_2N.copy()
-            truth = x_2N > xup;  
-            truthla= np.array([truth])
-            a1=np.array(truthla[0,0]);
-            for i in range(len(a1)):
-                if  a1[i]:    
-                    xnew2[0,i] = xup[0,i]
+            xnew2= checkdesignlimits(xlow,xup,np.array(xnew_))
+            #x_2N = xnew_.copy()  # Check if it is within the design limits, if not move back:
+            #truth = x_2N<xlow;  
+            #truthla= np.array([truth])
+            #a1=np.array(truthla[0,0]);
+            #for i in range(len(a1)):
+            #    if  a1[i]:    
+            #        x_2N[0,i] = xlow[0,i]
+            #    
+            #xnew2=x_2N.copy()
+            #truth = x_2N > xup;  
+            #truthla= np.array([truth])
+            #a1=np.array(truthla[0,0]);
+            #for i in range(len(a1)):
+            #    if  a1[i]:    
+            #        xnew2[0,i] = xup[0,i]
             
             #print xnew2,"\n"    xnew2 is pretty much the result of checking if it is within the design limits
             
-            print xnew2[0,:],xnew2.shape
-            print "finalcheck",xnewhahaha,xnewhahaha.shape
-            sys.exit()
+            #print xnew2[0,:],xnew2.shape
+            #print "finalcheck",xnewhahaha,xnewhahaha.shape
+            #sys.exit()
             x[fworstind_new]=xnew2[0,:]
             xnew=xnew2;     
 
@@ -294,7 +293,7 @@ if __name__=="__main__":
   import objfunc
   funcname=objfunc.install
   xlow=np.array([[-5,-5]])
-  xup=np.array([[5,5]])
+  xup=np.array([[5,1]])
   
   for i in range(1):
     xmin,fmin,funcVector,allf= apply(funcname,xlow,xup,samplingmethod="LHC")
