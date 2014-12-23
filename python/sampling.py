@@ -2,21 +2,36 @@ import numpy as np
 import random
 
 def Sample_Uniform(xlow=np.array([[-5,-5,-5]]),xup=np.array([[5,5,5]]),k=10):
+    """ Uniform Sampling between two numpy arrays
+  
+    xlow and xup and two numpy arrays with xlow.shape == xup.shapem. The default values are xlow.shape = (1,3).
+
+    This is also referred to as random sampling.
+    http://en.wikipedia.org/wiki/Latin_hypercube_sampling
+    
+    This function will return an numpy array x with x.shape = (k,3), which have bounds between xlow and xup
+    """
     xlowr,xlowc = xlow.shape[0],xlow.shape[1]   
     xupr,xupc = xup.shape[0],xup.shape[1]
     
     x=np.zeros((k,xlowc))
-
-    # this attempts to fill an array of size (p,q) with random numbers 
-    #print "Uniform Sampling"
     for i in range(0,xlowc):   
         vet = [random.uniform(xlow[0,i],xup[0,i]) for _ in range(1,k+1)] 
         x[:,i]=np.array(vet).transpose()
     return np.array(x)
     
 
-def Sample_LHC(xlow=np.array([[-5,-1,1]]),xup=np.array([[5,1,5]]),k=10,shuffle=True):
-    # print "Latin Hypercube Sampling"
+def Sample_LHC(xlow=np.array([[-5,-1,1]]),xup=np.array([[5,1,5]]),k=10,shuffle = False):
+    """ Latin Hyper-Cube Sampling between two numpy arrays
+  
+    xlow and xup and two numpy arrays with xlow.shape == xup.shapem. The default values are xlow.shape = (1,3).
+
+    http://en.wikipedia.org/wiki/Latin_hypercube_sampling
+    
+    This function will return an numpy array x with x.shape = (k,3), which have bounds between xlow and xup. Unlike random samling, Latin Hyper-cube sampling divides the sample space (equally) into k parts and populates a random number within these regions.
+
+    shuffle is an boolean  argument and will shuffle the generated list column wise for True Value.
+    """
     xlowr,xlowc = xlow.shape[0],xlow.shape[1]   
     xupr,xupc = xup.shape[0],xup.shape[1]
     x=np.zeros((k,xlowc))
@@ -33,8 +48,13 @@ def Sample_LHC(xlow=np.array([[-5,-1,1]]),xup=np.array([[5,1,5]]),k=10,shuffle=T
 		return x
 
 
-def Sample_debug(xlow=np.array([[-5,-1,1]]),xup=np.array([[5,1,5]]),k=10):
-    # print "Same Sample returned -- for debug purposes"
+def Sample_Debug(xlow=np.array([[-5,-1,1]]),xup=np.array([[5,1,5]]),k=10):
+    """ A non-random sampling for use during complex method development.  
+  
+    xlow and xup and two numpy arrays with xlow.shape == xup.shapem. The default values are xlow.shape = (1,3).
+    
+    This function will return an numpy array x with x.shape = (k,3), which have bounds between xlow and xup. 
+    """
     xlowr,xlowc = xlow.shape[0],xlow.shape[1]   
     xupr,xupc = xup.shape[0],xup.shape[1]
     x=np.zeros((k,xlowc))
@@ -53,6 +73,6 @@ if __name__=="__main__":
   x=Sample_LHC(xlow,xup,k,shuffle)
   print "Lattice Hypercube Sampling"
   print x 
-  x=Sample_debug(xlow,xup,k)
+  x=Sample_Debug(xlow,xup,k)
   print "Debug mode --  Should give the same values again and again"
   print x
