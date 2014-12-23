@@ -18,22 +18,13 @@ def firstChecks(xlowr,xupr,xlowc,xupc):
     return checkok
 
 def checkdesignlimits(xlow,xup,x):
-    #print "x",x
     t = np.array(x<xlow)
-    #print "t",t,t.shape[1]
     for i in range(t.shape[1]):
-        #print "first i",i
         if t.item(i):
             x[0,i]=xlow[0,i]
-    #print "xup"
-    #print     
     t1 = np.array(x>xup)
-    #print "x",x
-    #print "t1",t1,t1.shape[1]
     for j in range(t1.shape[1]):
-        #print "second i",j,t1.item(j)
         if t1.item(j):
-            #print "what",x[0,j],xup[0,j]
             x[0,j]=xup[0,j]; #print "x",x        
     return x
     
@@ -95,7 +86,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     fminV=[];
     allx=[];
     allf=[];
-    W=0.0;
     
     #find the row and column of xlow, xup  
     xlowr,xlowc = xlow.shape[0],xlow.shape[1] #print xlowr,xlowc 
@@ -145,7 +135,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     allf=f
     #Block 2    
     fworstind,fbestind =f.argmax(),f.argmin()
-    
     xworst,xbest=x[fworstind,:],x[fbestind,:]
     xmin=xbest   
         
@@ -178,30 +167,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         x_1=Rfak*(l1.item(l1.argmax())*(xup-xlow))*ri + x_1
         #print "x_1",x_1,x_1.shape
         xnew= checkdesignlimits(xlow,xup,x_1)
-        # Checking the point, whether it is in the limits or not
-        # Is it possible to write a seperate function for this. Is it needed?
-        #x_2 = x_1.copy()
-        #truth = x_1<xlow; #print truth,"\n"
-        #truthla= np.array([truth])
-        #a1=np.array(truthla[0,0]);
-        #for i in range(len(a1)):
-        #    if  a1[i]:
-        #        x_2[0,i] = xlow[0,i]
-        
-        #xnew=x_2.copy()
-        #truth = x_2 > xup;  
-        #truthla= np.array([truth])
-        #a1=np.array(truthla[0,0]);
-        #for i in range(len(a1)):
-        #    #print a1[i]
-        #    if  a1[i]:    
-        #        xnew[0,i] = xup[0,i] 
-                
-        #print "after the function",xnew,xnew.shape
         x[fworstind]=xnew[0,:] # Update the x
-        #print xnew[0,:]
-        #print xnewhahaha[0,:]
-        #sys.exit()
 
         # Updating f with the reflected point
         f[fworstind,0]=complex_func(obj,xnew[0,:])
@@ -215,34 +181,9 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         itera=1
         #pdb.set_trace()
         while (fworstind_new == fworstind) and (itera < IterMax) and (NoEvals < MaxEvals):  
-            #print "Inside while loop 2"
-            #print fworstind_new == fworstind
             a = 1 - math.exp(-1.0*itera/b)
             xnew_ = ((xc*(1.0-a) + x[fworstind_new,:]*a) + xnew)/2.0
-            #print np.array(xnew_), xnew_.shape
-            #print
             xnew2= checkdesignlimits(xlow,xup,np.array(xnew_))
-            #x_2N = xnew_.copy()  # Check if it is within the design limits, if not move back:
-            #truth = x_2N<xlow;  
-            #truthla= np.array([truth])
-            #a1=np.array(truthla[0,0]);
-            #for i in range(len(a1)):
-            #    if  a1[i]:    
-            #        x_2N[0,i] = xlow[0,i]
-            #    
-            #xnew2=x_2N.copy()
-            #truth = x_2N > xup;  
-            #truthla= np.array([truth])
-            #a1=np.array(truthla[0,0]);
-            #for i in range(len(a1)):
-            #    if  a1[i]:    
-            #        xnew2[0,i] = xup[0,i]
-            
-            #print xnew2,"\n"    xnew2 is pretty much the result of checking if it is within the design limits
-            
-            #print xnew2[0,:],xnew2.shape
-            #print "finalcheck",xnewhahaha,xnewhahaha.shape
-            #sys.exit()
             x[fworstind_new]=xnew2[0,:]
             xnew=xnew2;     
 
@@ -252,17 +193,14 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
             NoEvals=NoEvals+1
             
             # Function index calculation
-            fworstind_new =f.argmax()
-            fbestind_new  =f.argmin() 
+            fworstind_new,fbestind_new =f.argmax(),f.argmin()
+            #fbestind_new  =f.argmin() 
             
             itera=itera+1            
-            #print fworstind_new == fworstind
             if fmin > f[fworstind_new,0]: # Not needed in this while loop
-                #print "fmin",fmin
                 fmin = f[fworstind_new,0]
                 xmin= x[fworstind_new,:]
 
-            #raw_input("Press Enter to continue...")
         
         fworstind,fbestind=f.argmax(),f.argmin()
                    
@@ -283,7 +221,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
             conv_cond = 1 ;             print "Done 2"  
         
     fmin=complex_func(obj,np.array(xmin))    # this does not make any sense here either
-    print NoEvals
     return xmin,fmin,fminV,allf
     
 def apply(func, xlow, xup ,samplingmethod="LHC"): # 1
@@ -297,9 +234,3 @@ if __name__=="__main__":
   
   for i in range(1):
     xmin,fmin,funcVector,allf= apply(funcname,xlow,xup,samplingmethod="LHC")
-    #print i+1
-    #print "i,xmin,fmin, allf.shape[0],Hit count = , count"
-    #print i,xmin,fmin,funcVector.shape[1]
-    #if abs(fmin)<1e-4:
-        #print i,xmin,fmin, allf.shape[0],"Hit count = ", count
-     #   count=count+1
