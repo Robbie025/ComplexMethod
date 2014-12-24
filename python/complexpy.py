@@ -14,6 +14,9 @@ def firstChecks(xlowr,xupr,xlowc,xupc):
     if not (xlowc==xupc):
         print "Sorry! The dimensions have to be the same"; sys.exit(0)    
     
+    if not all(xup > xlow):
+       print "Please check the upper bounds and the lower bounds"; sys.exit(0)
+    
     checkok = True
     return checkok
 
@@ -138,11 +141,13 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     fmin,fmax = f[fbestind,0],f[fworstind,0]
     fminV=fmin
     
-    if abs(abs(fmax)-abs(fmin)) <= TolFunc:        #Is this correct? especially if fmin==0
-            conv_cond = 1 ;             print "Done- No need to Optimize fmin=0",abs(abs(fmax)-abs(fmin))                         
-    if abs(abs(fmax)-abs(fmin))/abs(fmin) <= TolFunc:    
-        conv_cond = 1;         print "Done -- No need to Optimize ",abs(abs(fmax)-abs(fmin))
-    #else: print "Complex Method Started"; print
+    if fmin == 0:
+       if abs(abs(fmax)-abs(fmin)) < TolFunc:        #Is this correct? especially if fmin==0
+            conv_cond = 1 ; 
+            print "Done -- No need to Optimize: abs(abs(fmax)-abs(fmin)) <=TolFunc" 
+            print "xmin = ",xmin, "fmin = ",fmin," fmax =",fmax, " TolFunc = ",  abs(abs(fmax)-abs(fmin))                            
+    elif abs(abs(fmax)-abs(fmin))/abs(fmin) <= TolFunc:    
+        conv_cond = 1;         print "Done -- No need to Optimize, abs(abs(fmax)-abs(fmin)) <= TolFunc"
      	 
     while NoEvals < MaxEvals and conv_cond == 0 and Iterations < IterationsMax:
         #Increase all f-values with a factor kf. This is the forgetting principle.
@@ -203,7 +208,8 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         fminV= np.vstack((fminV,fmin))
         allf=np.vstack((allf,fmin))
         
-        if abs(abs(fmax)-abs(fmin)) <= TolFunc:
+        if fmin == 0:
+           if abs(abs(fmax)-abs(fmin)) <= TolFunc:
                 conv_cond = 1 ;          #   print "Done 1"                         
         elif abs(abs(fmax)-abs(fmin))/abs(fmin) <= TolFunc:
             conv_cond = 1 ;           #  print "Done 2"  
