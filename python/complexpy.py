@@ -57,10 +57,10 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     IterMax=30                  
     
     # Maximum number of complex iterations
-    MaxEvals=10000              
+    MaxEvals=20000              
     
     #Maximum number of Iterations of the Complex method
-    IterationsMax=500
+    IterationsMax=5000
     # Constant used when moving the newpoint towards the center and best
     b=4.0                      
     

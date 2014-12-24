@@ -10,7 +10,7 @@ References
 
 
 Objective functions: 
-#These functions are from the Design Optimization Course (TMKT48) given at Linköping University, Sweden. Some of them have been taken from the test function wikipedia page.
+These functions are from the Design Optimization Course (TMKT48) given at Linköping University, Sweden. Some of them have been taken from the test function wikipedia page.
 
 
 File name: Objfunc.py
