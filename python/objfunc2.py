@@ -1,21 +1,36 @@
 import numpy as np
 def install(a):
-        objval=np.sum(np.sum(np.floor(a)))
-        return objval
+
+ """Step function and is also known as DE JONG's Function 3
+ 
+ This function can be described as Non convex wih flat surfaces.
+ 
+ http://en.wikipedia.org/wiki/Test_functions_for_optimization
+ 
+ f(x) = sum(floor(x))
+ Input parameters:  x - A numpy array of real values
+ Output			 :  One real value 
+
+ eg: 
+ x =[1.2,1.2]        => f = 2
+ x =[1.2,2.2,-1.2]   => f = 1
+ x =[1.2,-2.2]       => f = -2
+
+
+ Usage:
+ >> python objfunc2.py
+
+ or
+ >> import numpy as np
+ >> import objfunc2
+
+ >> x=np.array([[1.2,2.2,-1.]])
+ >> print objfunc2.install(x)            
+ """
+ objval=np.sum(np.sum(np.floor(a)))
+ return objval
  
 if __name__ == "__main__":
- """Implements the  Step function and is also known as DE JONG's Function 3
-  
- 
- Syntax:  ObjVal = dejong3(x)
- Input parameters:  x - A numpy array of real values
- eg:  x = np.array([[1.2,2.2,-1.3]])
-
- Output parameters:
-    objval    - One real value according to DeJong's function 3.
- 
- Usage: python objfunc2.py               
- """
  
  x=np.array([[1.2,2.2,-1.3]])
  print "x = ",x, " and the function value is ", install(x)
