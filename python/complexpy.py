@@ -6,18 +6,19 @@ import pdb
 def complex_func(func,x): #func,xup,xlow,maxeval,xstart):
     return func(x)
                
-def firstChecks(xlowr,xupr,xlowc,xupc): 
+def firstChecks(xup,xlow,xlowr,xupr,xlowc,xupc): 
 	#TOFO : Check if xlow and xup are correct as in all values in xlow < xup even for positive and negative limits
+    checkok = True
     if xlowr==0 and xupr==0: 
-        print "Only a row vector is allowed. Make sure you have an row vector"; sys.exit(0)
+        print "Only a row vector is allowed. Make sure you have an row vector"; checkok = False #sys.exit(0)
     
     if not (xlowc==xupc):
-        print "Sorry! The dimensions have to be the same"; sys.exit(0)    
+        print "Sorry! The dimensions have to be the same"; checkok = False #sys.exit(0)    
+    isgreater = xlow<xup
+    for i in range(isgreater.shape[1]) :
+      if not isgreater.item(i):
+       print "Please check the upper bounds and the lower bounds"; checkok = False #sys.exit(0)
     
-    if not all(xup > xlow):
-       print "Please check the upper bounds and the lower bounds"; sys.exit(0)
-    
-    checkok = True
     return checkok
 
 def checkdesignlimits(xlow,xup,x):
@@ -106,17 +107,17 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     kf = 1 - math.pow((Alfa/2),(Gamma/k))
 
     # Some Checks needs to be moved to a function as first_checks   
-    if xlowr==0 and xupr==0: 
-        print "Only a row vector is allowed. Make sure you have an row vector"; sys.exit(0)
-    
-    if not (xlowc==xupc):
-        print "Sorry! The dimensions have to be the same"; sys.exit(0)    
+    #if xlowr==0 and xupr==0: 
+       # print "Only a row vector is allowed. Make sure you have an row vector"; sys.exit(0)
+    #
+    #if not (xlowc==xupc):
+    #    print "Sorry! The dimensions have to be the same"; sys.exit(0)    
 
-    #firstcheck=firstChecks(xlowr,xupr,xlowc,xupc)
-    #if firstcheck==True:
-       #print "Passed the first Check"
-       #sys.exit()
-        
+    firstcheck=firstChecks(xup,xlow,xlowr,xupr,xlowc,xupc)
+    if not firstcheck==True:
+       print "Oops something wrong. Exiting!"
+       sys.exit(0)
+    #pdb.set_trace()    
     # Create a random array, within the limits, to start the optimization Process (x)
     # 
     if samplingmethod == "LHS":
@@ -232,14 +233,16 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     fmin=complex_func(obj,np.array(xmin))    # this does not make any sense here either
     return xmin,fmin,fminV,allf,Iterations
     
-def apply(func, xlow, xup ,samplingmethod="LHC"): # 1
-     return complexpy_(func,xlow,xup,samplingmethod="LHC") # 2
+def apply(func, xlow, xup ,samplingmethod="LHS"): # 1
+     return complexpy_(func,xlow,xup,samplingmethod) # 2
          
 if __name__=="__main__":
   import objfunc
+  samplingmethod = "LHS"
   funcname=objfunc.install
   xlow=np.array([[-5,-5]])
   xup=np.array([[5,1]])
   
   for i in range(1):
-    xmin,fmin,funcVector,allf= apply(funcname,xlow,xup,samplingmethod="LHC")
+    xmin,fmin,funcVector,allf,Iterations= apply(funcname,xlow,xup,samplingmethod)
+    print xmin,fmin,Iterations

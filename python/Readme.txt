@@ -1,5 +1,7 @@
 Complexrf Optimizer
-
+ 
+The python version is meant to be translation of the matlab code developed by Petter Krus and  Johan Ölvander. Please refer to the following documents.
+ 
 References
 
 1. Box, M.J., "A new method of constrained optimization and a comparison with other method," Computer Journal, Vol. 8, No. 1, pp. 42-52, 1965.
@@ -10,10 +12,15 @@ References
 
 4. Krus P., Ölvander J., Performance Index and Meta Optimization of a Direct Search Optimization Method, Engineering Optimization, Volume 45, Issue 10, pp 1167-1185, 2013.
 
-To Do list
-*** Documentation on the Readthedocs have to be gitified and developed.
-1. Need to have the x span implemented.
-2. Need to have the initial checks in a seperate function
-3. Number of complexrf runs  (see start.py ) needs to be multithreaded
-4. For god sakes, make the output better in all manners
+
+Contact:
+Johan Ölvander
+Division of Machine Desin
+Separtment of Management and Engineering
+Linköping University
+Sweden -581 83
+
+email: johan.olvander@liu.se
+
+
 

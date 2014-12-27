@@ -1,0 +1,20 @@
+Here we document the work that has to be done and what has been completed. 
+Mention this info in the commit log as well.
+
+
+To Do list
+
+. Documentation on the Readthedocs have to be gitified and developed.
+. x-span termination criteria needs to be implemented. See the matlab code for reference
+. Number of complexrf runs  (see start.py ) needs to be multithreaded. low priority
+. In start.py the oytput needs to be formatted nicely. Low priority .
+
+
+Done & by whom
+
+
+. Need to have the initial checks in a seperate function
+	2014-12-28
+	Varun Gopinath
+	Note: all the runs on start.py was run successfully
+
