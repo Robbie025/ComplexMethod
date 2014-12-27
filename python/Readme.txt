@@ -23,4 +23,5 @@ Sweden -581 83
 email: johan.olvander@liu.se
 
 
-
+For questions about the python version contact
+varungopi@gmail.com	
