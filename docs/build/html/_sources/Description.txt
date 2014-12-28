@@ -1,0 +1,5 @@
+Description
+==========
+The Complex method was first presented by Box [1], and later improved by Guin [36]. The method is a constraint simplex method, hence the name Complex, developed from the Simplex method by Spendley et al [79] and Nelder Mead, [64]. Similar related methods go under names such as Nelder-Mead Simplex. The main difference between the Simplex method and the complex method is that the Complex method uses more points during the search process.
+
+In the Complex method the word complex refers to a geometric shape with k>=n+1, points in an n-dimensional space. These k points are known as vertices of the complex. To make the explanation of the algorithm simple we will focus on a two-dimensional space and a complex consisting of four vertices, i.e. n=2 and k=4. Typically the number of points in the complex, k, is twice as many as the number of design variables, n. The starting points are generated using random numbers. Each of the k points in the complex could be expressed according to (43) where x l and x u are the upper and lower variable limits and R a random number in the interval [0, 1].
