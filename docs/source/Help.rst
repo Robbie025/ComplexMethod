@@ -1,19 +1,26 @@
 Contact
-=======
+========
 
-Johan Ölvander
-Division of Machine Desin
-Department of Management and Engineering
-Linköping University
-Sweden -581 83
+Mailing Address
+	| Johan Ölvander
+	| Division of Machine Design
+	| Department of Management and Engineering
+	| Linköping University
+	| Sweden -581 83
+	| email: johan.olvander@liu.se
 
-email: johan.olvander@liu.se
+Question about this site and git:
+	email: varungopi@gmail.com
 
-For the python version contact:
-email: varungopi@gmail.com
-
-
-Website:
+Links:
 ********
-http://www.iei.liu.se/machine?l=en
+
+Division of Machine Design
+     http://www.iei.liu.se/machine?l=en
+
+Git Repository
+	https://github.com/Robbie025/ComplexMethod
+
+
+
 
