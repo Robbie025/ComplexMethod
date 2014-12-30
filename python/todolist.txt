@@ -9,7 +9,8 @@ To Do list
 . In start.py the oytput needs to be formatted nicely. Low priority 
 . Code needs to be well commented.
 . Many errors in the Description section like the references
-.  
+. IDEA: make a table which shows different iterations, sort of as an example. For the documentation
+. IDEA: can the documentation be more dynamic? readthedocs seems limited. People can optimize a problem online and view the process in a 3d plot.
 
 Done & by whom
 
