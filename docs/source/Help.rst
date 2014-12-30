@@ -1,7 +1,5 @@
-Help
-=====
-
-Contact:
+Contact
+=======
 
 Johan Ölvander
 Division of Machine Desin
@@ -16,6 +14,6 @@ email: varungopi@gmail.com
 
 
 Website:
-*******
+********
 http://www.iei.liu.se/machine?l=en
 

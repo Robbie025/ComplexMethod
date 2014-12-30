@@ -30,7 +30,7 @@ import os
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.pngmath'
+    'sphinx.ext.pngmath',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -46,7 +46,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'complexpyDocs'
+project = u'complexpydocs'
 copyright = u'2014, Varun Gopinath'
 
 # The version info for the project you're documenting, acts as replacement for
