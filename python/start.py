@@ -18,7 +18,7 @@ For "LHS" add the shuffle = True/False
 samplingmethod = "LHS"
 shuffle=False
 
-NE=105
+NE=10
 
 
 # OBJFUNC  --------- OBJFUNC

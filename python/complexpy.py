@@ -1,13 +1,13 @@
 import math,sys,random
 import numpy as np
 import sampling as sample_vector
-import pdb
 
 def complex_func(func,x): #func,xup,xlow,maxeval,xstart):
     return func(x)
                
 def firstChecks(xup,xlow,xlowr,xupr,xlowc,xupc): 
-	#TOFO : Check if xlow and xup are correct as in all values in xlow < xup even for positive and negative limits
+	# Check if xlow and xup are correct as in all values in xlow < xup even for positive and negative limits
+
     checkok = True
     if xlowr==0 and xupr==0: 
         print "Only a row vector is allowed. Make sure you have an row vector"; checkok = False #sys.exit(0)
@@ -22,11 +22,14 @@ def firstChecks(xup,xlow,xlowr,xupr,xlowc,xupc):
     return checkok
 
 def checkdesignlimits(xlow,xup,x):
+    # Check if the point x is within the design limits. If not it is pushed/pulled back into the design limits.
+
     t = np.array(x<xlow)
     for i in range(t.shape[1]):
         if t.item(i):
             x[0,i]=xlow[0,i]
     t1 = np.array(x>xup)
+    # for the positive values
     for j in range(t1.shape[1]):
         if t1.item(j):
             x[0,j]=xup[0,j]; #print "x",x        
@@ -49,44 +52,32 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
   
     4. Krus P., lvander J., Performance Index and Meta Optimization of a Direct Search Optimization Method, Engineering Optimization, Volume 45, Issue 10, pp 1167-1185, 2013.   
     """
-    #Block one
     # Constants to be used in the complex algorithm
     
-    # Reflection Distance
-    Alfa = 1.3
+    Alfa = 1.3    # Reflection Distance
     
-    # Maximum number of iterations for the correcting the reflection point.
-    IterMax = 30                  
+    IterMax = 3   # Maximum number of iterations for the correcting the reflection point.
     
-    # Maximum number of complex iterations
-    MaxEvals = 20000              
+    MaxEvals = 20000       # Maximum number of complex iterations
     
-    #Maximum number of Iterations of the Complex method
-    IterationsMax = 5000
+    IterationsMax = 5000   #Maximum number of Iterations of the Complex method
     
-    # Constant used when moving the newpoint towards the center and best
-    b = 4.0                      
+    b = 4.0                # Constant used when moving the newpoint towards the center and best
     
-    # Tolerance for function convergence
-    TolFunc = 0.000001  
+    TolFunc = 0.000001       # Tolerance for function convergence
     
-    # Tolerance for parameter convergence - Not implemented
-    TolX = 0.0001               
-    
+    TolX = 0.0001                   # Tolerance for parameter convergence - Not implemented
+
     Gamma = 0.3
     
-    #Radomization factor 
-    Rfak = 0.3;
+    Rfak = 0.3;     #Radomization factor 
     
-    # Count of Number of Function evaluation
-    NoEvals=0                    
+    NoEvals=0        # Count of Number of Function evaluation
     
-    # Count of Number of Optimization iteration
-    Iterations=0                  
+    Iterations=0              # Count of Number of Optimization iteration
     
     fmin=float("inf")
     
-    # to be described
     conv_cond=0      
     fminV=[];
     allx=[];
@@ -107,19 +98,13 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     kf = 1 - math.pow((Alfa/2),(Gamma/k))
 
     # Some Checks needs to be moved to a function as first_checks   
-    #if xlowr==0 and xupr==0: 
-       # print "Only a row vector is allowed. Make sure you have an row vector"; sys.exit(0)
-    #
-    #if not (xlowc==xupc):
-    #    print "Sorry! The dimensions have to be the same"; sys.exit(0)    
 
     firstcheck=firstChecks(xup,xlow,xlowr,xupr,xlowc,xupc)
     if not firstcheck==True:
        print "Oops something wrong. Exiting!"
        sys.exit(0)
-    #pdb.set_trace()    
+    
     # Create a random array, within the limits, to start the optimization Process (x)
-    # 
     if samplingmethod == "LHS":
       x = sample_vector.Sample_LHC(xlow,xup,k,shuffle=False)
     elif samplingmethod == "Debug":
@@ -137,7 +122,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
    
     allf=f
     
-    #Block 2    
     fworstind,fbestind =f.argmax(),f.argmin()
     xworst,xbest=x[fworstind,:],x[fbestind,:]
     xmin=xbest   
@@ -187,7 +171,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         fworstind_new = f.argmax()
         fbestind_new  = f.argmin() 
         
-        # Block 3
         # Redo the reflection, if the reflected point remains the worst point 
         itera=1
         while (fworstind_new == fworstind) and (itera < IterMax) and (NoEvals < MaxEvals):  
