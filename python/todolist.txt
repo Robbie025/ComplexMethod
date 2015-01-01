@@ -1,19 +1,21 @@
-Here we document the work that has to be done and what has been completed. 
-Mention this info in the commit log as well.
-
-
 To Do list
+===========
+
+Here we document the work that has to be done and what has been completed. 
+Mention this info in the commit log as well
 
 . x-span termination criteria needs to be implemented. See the matlab code for reference .. high priority
 . Number of complexrf runs  (see start.py ) needs to be multithreaded. low priority
 . In start.py the oytput needs to be formatted nicely. Low priority 
-. Code needs to be well commented.
+. Code needs to be well commented. On going work. Needs to connect the documentation equation to the software implemenation. Needs to start with the matlab code as well.
 . Many errors in the Description section like the references
 . IDEA: make a table which shows different iterations, sort of as an example. For the documentation
-. IDEA: can the documentation be more dynamic? readthedocs seems limited. People can optimize a problem online and view the process in a 3d plot.
+. Can we have a website which can show an animation/plotting. Not hard wired, but live runs.
 
-Done & by whom
 
+
+Completed along with the user resposible.
+===========================================
 
 . Need to have the initial checks in a seperate function
 	2014-12-28

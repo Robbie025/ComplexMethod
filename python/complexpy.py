@@ -14,20 +14,23 @@ def firstChecks(xup,xlow,xlowr,xupr,xlowc,xupc):
     
     if not (xlowc==xupc):
         print "Sorry! The dimensions have to be the same"; checkok = False #sys.exit(0)    
+
     isgreater = xlow<xup
+
     for i in range(isgreater.shape[1]) :
       if not isgreater.item(i):
-       print "Please check the upper bounds and the lower bounds"; checkok = False #sys.exit(0)
+            print "Please check the upper bounds and the lower bounds"; checkok = False #sys.exit(0)
     
     return checkok
 
 def checkdesignlimits(xlow,xup,x):
     # Check if the point x is within the design limits. If not it is pushed/pulled back into the design limits.
-
+    # Evaluating the design limit constraints.
     t = np.array(x<xlow)
     for i in range(t.shape[1]):
         if t.item(i):
             x[0,i]=xlow[0,i]
+
     t1 = np.array(x>xup)
     # for the positive values
     for j in range(t1.shape[1]):
@@ -36,7 +39,7 @@ def checkdesignlimits(xlow,xup,x):
     return x
     
 def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
-    """ The complexrf method implemented in python -- 
+    """ The complexrf method 
     
     References
 
@@ -55,36 +58,25 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     # Constants to be used in the complex algorithm
     
     Alfa = 1.3    # Reflection Distance
-    
     IterMax = 3   # Maximum number of iterations for the correcting the reflection point.
-    
     MaxEvals = 20000       # Maximum number of complex iterations
-    
     IterationsMax = 5000   #Maximum number of Iterations of the Complex method
-    
     b = 4.0                # Constant used when moving the newpoint towards the center and best
-    
     TolFunc = 0.000001       # Tolerance for function convergence
-    
     TolX = 0.0001                   # Tolerance for parameter convergence - Not implemented
-
     Gamma = 0.3
-    
     Rfak = 0.3;     #Radomization factor 
-    
     NoEvals=0        # Count of Number of Function evaluation
-    
     Iterations=0              # Count of Number of Optimization iteration
-    
     fmin=float("inf")
     
-    conv_cond=0      
+    conv_cond = 0      
     fminV=[];
     allx=[];
     allf=[];
     
     #Get the number of rows and columns of xlow, xup  
-    xlowr,xlowc = xlow.shape[0],xlow.shape[1] #print xlowr,xlowc 
+    xlowr,xlowc = xlow.shape[0],xlow.shape[1] 
     xupr,xupc = xup.shape[0],xup.shape[1]
     
     Nparams = xlowc;            # Number of optimization parameters
@@ -97,14 +89,14 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         
     kf = 1 - math.pow((Alfa/2),(Gamma/k))
 
-    # Some Checks needs to be moved to a function as first_checks   
 
     firstcheck=firstChecks(xup,xlow,xlowr,xupr,xlowc,xupc)
-    if not firstcheck==True:
+    if not firstcheck == True:
        print "Oops something wrong. Exiting!"
        sys.exit(0)
     
     # Create a random array, within the limits, to start the optimization Process (x)
+    # Currently, there are three strategy to initialize the complex. Please see sampling.py
     if samplingmethod == "LHS":
       x = sample_vector.Sample_LHC(xlow,xup,k,shuffle=False)
     elif samplingmethod == "Debug":
@@ -114,7 +106,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     
     allx=x.copy()
     
-    # This is the starting value of complex method -- I will have to change this to a function. Modularize!
+    # This is the starting function value of complex space 
     NoEvals=k
     f=np.zeros([k,1])
     for i in range(0,x.shape[0]):
@@ -216,8 +208,8 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     fmin=complex_func(obj,np.array(xmin))    # this does not make any sense here either
     return xmin,fmin,fminV,allf,Iterations
     
-def apply(func, xlow, xup ,samplingmethod="LHS"): # 1
-     return complexpy_(func,xlow,xup,samplingmethod) # 2
+def apply(func, xlow, xup ,samplingmethod="LHS"): 
+     return complexpy_(func,xlow,xup,samplingmethod) 
          
 if __name__=="__main__":
   import objfunc
