@@ -57,16 +57,16 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     """
     # Constants to be used in the complex algorithm
     
-    Alfa = 1.3    # Reflection Distance
-    IterMax = 3   # Maximum number of iterations for the correcting the reflection point.
-    MaxEvals = 20000       # Maximum number of complex iterations
-    IterationsMax = 5000   #Maximum number of Iterations of the Complex method
-    b = 4.0                # Constant used when moving the newpoint towards the center and best
-    TolFunc = 0.000001       # Tolerance for function convergence
-    TolX = 0.0001                   # Tolerance for parameter convergence - Not implemented
+    Alfa = 1.3                # Reflection Distance
+    IterMax = 3               # Maximum number of iterations for the correcting the reflection point.
+    MaxEvals = 20000          # Maximum number of complex iterations
+    IterationsMax = 5000      # Maximum number of Iterations of the Complex method
+    b = 4.0                   # Constant used when moving the newpoint towards the center and best
+    TolFunc = 0.000001        # Tolerance for function convergence
+    TolX = 0.0001             # Tolerance for parameter convergence - Not implemented
     Gamma = 0.3
-    Rfak = 0.3;     #Radomization factor 
-    NoEvals=0        # Count of Number of Function evaluation
+    Rfak = 0.3;               # Radomization factor 
+    NoEvals=0                 # Count of Number of Function evaluation
     Iterations=0              # Count of Number of Optimization iteration
     fmin=float("inf")
     
@@ -80,7 +80,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     xupr,xupc = xup.shape[0],xup.shape[1]
     
     Nparams = xlowc;            # Number of optimization parameters
-    xmin=np.zeros([xlowc]) 
+    xmin = np.zeros([xlowc]) 
     
     if Nparams == int(1):
 		k=3;   
@@ -89,10 +89,10 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         
     kf = 1 - math.pow((Alfa/2),(Gamma/k))
 
-
-    firstcheck=firstChecks(xup,xlow,xlowr,xupr,xlowc,xupc)
+    # Check if inputs are correct
+    firstcheck = firstChecks(xup,xlow,xlowr,xupr,xlowc,xupc)
     if not firstcheck == True:
-       print "Oops something wrong. Exiting!"
+       print "Oops! Process terminated"
        sys.exit(0)
     
     # Create a random array, within the limits, to start the optimization Process (x)
@@ -104,25 +104,26 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     else:
        x=sample_vector.Sample_Uniform(xlow,xup,k)
     
-    allx=x.copy()
+
     
     # This is the starting function value of complex space 
-    NoEvals=k
+    NoEvals = k
     f=np.zeros([k,1])
     for i in range(0,x.shape[0]):
 		 f[i,0]=complex_func(obj,np.array(x[i,:]))
    
-    allf=f
+    allf = f.copy() # Maintain all function values
+    allx = x.copy() # Maintain all design variable values
     
-    fworstind,fbestind =f.argmax(),f.argmin()
-    xworst,xbest=x[fworstind,:],x[fbestind,:]
-    xmin=xbest   
+    fworstind,fbestind = f.argmax(),f.argmin()
+    xworst,xbest = x[fworstind,:],x[fbestind,:]
+    xmin = xbest   
         
     fmin,fmax = f[fbestind,0],f[fworstind,0]
     fminV=fmin
     
     if fmin == 0:
-       if abs(abs(fmax)-abs(fmin)) < TolFunc:        #Is this correct? especially if fmin==0
+       if abs(abs(fmax)-abs(fmin)) < TolFunc:        
             conv_cond = 1 ; 
             print "Done -- No need to Optimize: abs(abs(fmax)-abs(fmin)) <=TolFunc" 
             print "xmin = ",xmin, "fmin = ",fmin," fmax =",fmax, " TolFunc = ",  abs(abs(fmax)-abs(fmin))                            
@@ -172,7 +173,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
             xnew2 = checkdesignlimits(xlow,xup,np.array(xnew_))
             x[fworstind_new]=xnew2[0,:]
             
-            xnew=xnew2;     
+            xnew = xnew2;     
 
             # Updating f with the reflected point
             f[fworstind_new,0] = complex_func(obj,xnew2[0,:])
