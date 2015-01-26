@@ -84,7 +84,8 @@ Matlab
 
 .. note::
 
-	More information comming soon....
-        iThis code is part of the TMT48 - Design Optimization given at the Division of Machine Design, Linköping University.
+	More information comming soon ....
+
+        This code is part of the *TMKT48 - Design Optimization* given at the Division of Machine Design, Linköping University, Sweden.
 
 
