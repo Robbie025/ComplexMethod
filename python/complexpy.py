@@ -1,7 +1,7 @@
 import math,sys,random
 import numpy as np
 import sampling as sample_vector
-
+import pdb
 def complex_func(func,x): #func,xup,xlow,maxeval,xstart):
     return func(x)
                
@@ -58,11 +58,11 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     # Constants to be used in the complex algorithm
     
     Alfa = 1.3                # Reflection Distance
-    IterMax = 3               # Maximum number of iterations for the correcting the reflection point.
-    MaxEvals = 20000          # Maximum number of complex iterations
+    IterMax = 30               # Maximum number of iterations for the correcting the reflection point.
+    MaxEvals = 500          # Maximum number of complex iterations
     IterationsMax = 5000      # Maximum number of Iterations of the Complex method
     b = 4.0                   # Constant used when moving the newpoint towards the center and best
-    TolFunc = 0.000001        # Tolerance for function convergence
+    TolFunc = 0.00001        # Tolerance for function convergence
     TolX = 0.0001             # Tolerance for parameter convergence - Not implemented
     Gamma = 0.3
     Rfak = 0.3;               # Radomization factor 
@@ -199,13 +199,15 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         fminV= np.vstack((fminV,fmin))
         allf=np.vstack((allf,fmin))
         
-        # fmin==0 check is needed, other wise the span does not work.
+        xbig = np.amax(x);
+        xsmall = np.amin(x);
         if fmin == 0:
            if abs(abs(fmax)-abs(fmin)) <= TolFunc:
                 conv_cond = 1 ;          #   print "Done 1"                         
         elif abs(abs(fmax)-abs(fmin))/abs(fmin) <= TolFunc:
             conv_cond = 1 ;           #  print "Done 2"  
-        
+        if TolX >= abs(np.amax(((xbig-xsmall)/(xup-xlow)))):
+               conv_cond = 2 
     fmin=complex_func(obj,np.array(xmin))    # this does not make any sense here either
     return xmin,fmin,fminV,allf,Iterations
     
@@ -213,11 +215,11 @@ def apply(func, xlow, xup ,samplingmethod="LHS"):
      return complexpy_(func,xlow,xup,samplingmethod) 
          
 if __name__=="__main__":
-  import objfunc
+  import objfunc4 as obj
   samplingmethod = "LHS"
-  funcname=objfunc.install
-  xlow=np.array([[-5,-5]])
-  xup=np.array([[5,1]])
+  funcname=obj.install
+  xlow=np.array([[-512,-512]])
+  xup=np.array([[512,512]])
   
   for i in range(1):
     xmin,fmin,funcVector,allf,Iterations= apply(funcname,xlow,xup,samplingmethod)

@@ -16,6 +16,10 @@ Mention this info in the commit log as well
 
 Completed along with the user resposible.
 ===========================================
+. x-span termination criteria implemented and seems to work well right now
+	2015-02-17
+	Varun Gopinath
+	note: all the runs on start.py ran successfullly
 
 . Need to have the initial checks in a seperate function
 	2014-12-28
