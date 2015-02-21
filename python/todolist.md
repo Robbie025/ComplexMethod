@@ -4,7 +4,6 @@ To Do list
 Here we document the work that has to be done and what has been completed. 
 Mention this info in the commit log as well
 
-. x-span termination criteria needs to be implemented. See the matlab code for reference .. high priority
 . Number of complexrf runs  (see start.py ) needs to be multithreaded. low priority
 . In start.py the oytput needs to be formatted nicely. Low priority 
 . Code needs to be well commented. On going work. Needs to connect the documentation equation to the software implemenation. Needs to start with the matlab code as well.
