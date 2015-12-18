@@ -45,6 +45,22 @@ Links to install python and numpy:
 	https://www.python.org/downloads/
 	http://www.numpy.org/
 
+Sphinx
+------
+
+Sphinx is used for documentation of the project. To install sphinx, in a terminal window run:
+
+::
+
+	$ sudo apt-get install python-sphinx
+
+The source files can be found in the *source* folder. To build the documentation, in a terminal window run:i
+
+::
+	
+	$ make html
+
+
 
 More Information
 -----------------
