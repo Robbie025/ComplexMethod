@@ -71,27 +71,27 @@ If you interested in more information, please check out this site. It has tons o
 Python
 ******
 
-The python version of the complexmehtod is divided into three.
+The python version of the complexmethod is divided into three.
 
 	1. Complexpy.py - This source file contains the implemenation of the complex method in python. Typically, the user need not edit this file, unless there is a need to change certain parameter values such as tolerance limits, reflection distance etc. If you would like to read a theoritical decription of the complex method, please read the next section titled **Description**.
-	2. objfunc*.py - This source file contains the implementation of the objective fuction that you would like to minimize. Currently, the file contains one function definition (install) that takes a numpy value and returns the objective function value.  The user should try to add your own objective fuction.
-	3. start.py -This python file is used to run the optimiation values. You can think of it as the glue between the complexpy.py and objfunc.py. Of course there is no need to use this file as you can run the optimiztion process from a python interpreter.
+	2. objfunc*.py - This source file contains the implementation of the objective function that you would like to minimize. Currently, the file contains one function definition (install) that takes a numpy value and returns the objective function value.  The user can try to add your own objective fuction. The user can simply use the existing file as a template. There is an excellant wiki where mathematical test functions are listed -- search for *optimization test function*.
+	3. start.py - This python file is used to run the optimiation. You can think of it as the glue between the complexpy.py and objfunc.py. Of course there is no need to use this file as you can run the optimiztion process from a python interpreter.
 
-After you have installed python and numpy, to get stated run start.py after you have cd to the python folder
+After you have installed python and numpy, to get stated run start.py after you have cd to the python folder.
 
 ::
 	
 	cd ComplexMethod/python
 	python start.py
 
-start.py has been  setup to optimize the first four objective functions given in repo. The function description are given in the file objfun.py objfun2.py  objfunc3.py and objfunc4.py
-
-You can also see the help from the python interpreter,
+start.py has been  setup to optimize the first four objective functions given in repo. The function description are given in the file objfun.py, objfun2.py, objfunc3.py and objfunc4.py.
+You can also see the help from the python interpreter. 
 
 example:
 
 ::
 
+	python
 	import objfunc4
 	help(objfunc4)
 
