@@ -9,7 +9,7 @@ Contents:
 
    Work
    Description
-   Help
+   Contact
 
 
 * :ref:`genindex`

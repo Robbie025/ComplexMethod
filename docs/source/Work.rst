@@ -1,4 +1,4 @@
-Tutorials
+Prerequisite
 =========
 
 This chapter will detail the software tools needed to run the complex method algorithm. Currently, there are two implementations of the algorithm: 1. Python and 2, Matlab.
@@ -18,10 +18,16 @@ Software
 Git
 ----
 
-To clone the complexmethod repository, git must be installed in your system. The following links will help you understand the basics of git which is prerequite if you would like to use the code and contribute to this project.
+To clone the complexmethod repository, git must be installed in your system. The following links will help you understand the basics of git, which is prerequisite if you would like to use the code and contribute to this project.
 
 	| http://git-scm.com/book/en/v2
 	| https://guides.github.com/introduction/flow/index.html
+
+To install git from a terminal run:
+
+::
+
+	$ sudo apt-get install git 
 
 Once you have git installed, then it is quite easy to download the code onto your local drive. This process is called *cloning* and it will create a clone of the ComplexMethod repository.
 
@@ -54,7 +60,7 @@ Sphinx is used for documentation of the project. To install sphinx, in a termina
 
 	$ sudo apt-get install python-sphinx
 
-The source files can be found in the *source* folder. To build the documentation, in a terminal window run:i
+The source files can be found in the *source* folder. To build the documentation, in a terminal window run:
 
 ::
 	
