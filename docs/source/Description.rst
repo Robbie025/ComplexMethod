@@ -1,4 +1,4 @@
-Description
+Complex Method -- Description
 ===========
 
 The Complex method was first presented by Box [1], and later improved by Guin [2]. 

@@ -4,23 +4,35 @@ Introduction
 The Complex Method is an optimization algorithm and is based on the Simplex method. The complex method has been applied to a wide range of problems such as physics
 , structural engineering, fluid power system design and aerospace engineering. The aim of the project is to make the complex method source code available to the general public. At the moment, the code is available in two implementations: python and matlab. 
 
-Software Prerequisites
+Overview
 =========
 
-This chapter will detail the software tools needed to run the complex method algorithm. Currently, there are two implementations of the algorithm: 1. Python and 2, Matlab.
-The section **Software** will detail the  software you must have in order to run the code as well as document the code as you see on this site.
+The documentation for the complexmethod is arranged as follows:
+
+	3. **Software Prerequisites** will detail the software tools that are required to run the python and matlab codes. These include git, python with numpy, sphinx for documentation and Matlab (or Octave).
+	4. **Complex Method -- Python** will describe the files that are included in the repository. Using examples for illustration, the included files can be used as templates for using the complex method in your own projects.
+
+	#. **Complex Method -- Matla** is a work in progress and will be updated in the near future
+	#. **Description** will describe the Complex optimization algorithm along with its variant The complex-rf
+	
+ 
 
 
-	1. *Git*
+
+.. This chapter will detail the software tools needed to run the complex method algorithm. Currently, there are two implementations of the algorithm: 1. Python and 2, Matlab.
+
+..  The section **Software** will detail the  software you must have in order to run the code as well as document the code as you see on this site.
+
+
+..	1. *Git*
 	2. *Python* with *Numpy*
 	
 	#. *Sphinx* for building the documentation
 	#. *Matlab* to run the  ***.m files
 
 
-Software
-********
-
+Software Prerequisites
+==========
 Git
 ----
 
@@ -52,10 +64,9 @@ A version of complex method written in python  is available in the git repositor
 
 Links to install python and numpy:
 
-:: 
 
-	https://www.python.org/downloads/
-	http://www.numpy.org/
+	| https://www.python.org/downloads/
+	| http://www.numpy.org/
 
 Sphinx
 ------
@@ -68,15 +79,24 @@ Sphinx is used for documentation of the project. To install sphinx, in a termina
 
 The source files can be found in the *source* folder. To build the documentation, in a terminal window run:
 
-::
+:: 
 	
-	$ make html
-
+	make html
+	make latexpdf
 Remember that latex must be installed for building the math equations. For ubuntu pcs: 
 
 ::
 
 	$ sudo apt-get install texlive-full
+
+
+Matlab
+------
+You need Matlab from mathworks to run the code. The intention is to have code compatible with both matlab and Octave. 
+
+
+	https://www.mathworks.com/
+
 
 More Information
 -----------------
@@ -84,8 +104,8 @@ More Information
 If you interested in more information, please check out this site. It has tons of information to get you started on the software development process.
 	http://toolbox.readthedocs.org/en/latest/
 
-Python
-******
+Complex Method -- Python
+=========
 
 The python version of the complexmethod is divided into four.
 
@@ -127,8 +147,8 @@ example:
 	import objfunc4
 	help(objfunc4)
 
-Matlab
-******
+Complex Method -- Matlab
+==========
 
 .. note::
 
