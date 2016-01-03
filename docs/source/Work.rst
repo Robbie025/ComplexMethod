@@ -9,11 +9,11 @@ Overview
 
 The documentation for the complexmethod is arranged as follows:
 
-	3. **Software Prerequisites** will detail the software tools that are required to run the python and matlab codes. These include git, python with numpy, sphinx for documentation and Matlab (or Octave).
+	3. **Software Prerequisites** will detail the software tools that are required to run the python and matlab codes. These include git, python with numpy, sphinx for documentation and Matlab. The terminal based installation given here are for ubuntu based systems. Nonetheless, the source code for python and matlab should work in mac and windows systems, provided the necessary packages are available. 
 	4. **Complex Method -- Python** will describe the files that are included in the repository. Using examples for illustration, the included files can be used as templates for using the complex method in your own projects.
 
-	#. **Complex Method -- Matla** is a work in progress and will be updated in the near future
-	#. **Description** will describe the Complex optimization algorithm along with its variant The complex-rf
+	#. **Complex Method -- Matlab** is a work in progress and will be updated in the near future.
+	#. **Description** will describe the Complex optimization algorithm along with its variant, The complex-rf.
 	
  
 
@@ -154,6 +154,6 @@ Complex Method -- Matlab
 
 	More information comming soon ....
 
-        This code is part of the *TMKT48 - Design Optimization* given at the Division of Machine Design, Linköping University, Sweden.
+        This code is part of the *TMKT48 - Design Optimization* given at the Division of Machine Design, Linköping University, Sweden. Documentation can also be found in the souce files.
 
 
