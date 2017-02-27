@@ -34,5 +34,5 @@ def install(x):
 	return ObjVal
 
 if __name__ == "__main__":
-    x=np.array([[1,1,1,1]])
+    x=np.array([-0,-0])
     print x,"Value= ",install(x)," and should be zero for x is zero for [1,1,1]"

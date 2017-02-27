@@ -15,10 +15,10 @@ samplingmethod = "Debug"
 amplingmethod = "Uniform"
 For "LHS" add the shuffle = True/False
 """
-samplingmethod = "LHS"
+samplingmethod = "Uniform"
 shuffle=False
 
-NE=10
+NE=5
 
 
 # OBJFUNC  --------- OBJFUNC
@@ -29,15 +29,15 @@ USER: Please enter the objfunc module and define the function in the next two li
 import objfunc as obj  
 funcname=obj.install
 # This was done for the Objfunc.py
-xlow=np.array([[-5,-5]])
-xup=np.array([[5,5]])
+xlow=np.array([-5,-5])
+xup=np.array([5,5])
 
 start_=time.time()
 np.set_printoptions(precision=3)
 print "\ni \t \t xmin \t\t\tfmin \t No.Of Evaluations \t Iterations\t time"
 for i in range(NE):
     xmin,fmin,funcVector,allf,Iterations= apply(funcname,xlow,xup,samplingmethod)
-    print i,"\t",xmin,"\t\t","{:10.6f}".format(fmin),"\t\t",allf.shape[0],"\t\t",Iterations,"\t","{:7.3f}".format(time.time()-start_)
+    print i+1,"\t",xmin,"\t\t","{:10.6f}".format(fmin),"\t\t",allf.shape[0],"\t\t",Iterations,"\t","{:7.3f}".format(time.time()-start_)
     start_=time.time()
 
 
@@ -46,7 +46,6 @@ for i in range(NE):
 # OBJFUNC2  --------- OBJFUNC2
 """
 USER: Please enter the objfunc module and define the function in the next two lines
-"""
 import objfunc2 as obj  
 funcname=obj.install
 # This was done for the Objfunc2.py
@@ -60,11 +59,11 @@ for i in range(NE):
     print i,"\t",xmin,"\t\t","{:10.6f}".format(fmin),"\t\t",allf.shape[0],"\t\t",Iterations,"\t","{:7.3f}".format(time.time()-start_)
     start_=time.time()
 
+"""
 
 # OBJFUNC3  --------- OBJFUNC3
 """
 USER: Please enter the objfunc module and define the function in the next two lines
-"""
 import objfunc3 as obj  
 funcname=obj.install
 # This was done for the Objfunc3.py
@@ -80,10 +79,11 @@ for i in range(NE):
     start_=time.time()
 
 
+"""
+#import objfunc3 as obj  
 # OBJFUNC4  --------- OBJFUNC4
 """
 USER: Please enter the objfunc module and define the function in the next two lines
-"""
 import objfunc4 as obj  
 funcname=obj.install
 # This was done for the Objfunc4.py
@@ -100,7 +100,13 @@ for i in range(NE):
 
     
 """
+"""
+USER: Please enter the objfunc module and define the function in the next two lines
+USER: Please enter the objfunc module and define the function in the next two lines
+USER: Please enter the objfunc module and define the function in the next two lines
+"""
 # This is the plotting functions 
+"""
 import matplotlib.pyplot as plt
 line, = plt.plot(allf, '--', linewidth=2)
 dashes = [10, 5, 100, 5] 

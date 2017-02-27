@@ -5,20 +5,17 @@ import pdb
 def complex_func(func,x): #func,xup,xlow,maxeval,xstart):
     return func(x)
                
-def firstChecks(xup,xlow,xlowr,xupr,xlowc,xupc): 
+def firstChecks(xup,xlow): 
 	# Check if xlow and xup are correct as in all values in xlow < xup even for positive and negative limits
-
+    xlowr,xupr = xlow.shape[0],xup.shape[0]
     checkok = True
     if xlowr==0 and xupr==0: 
         print "Only a row vector is allowed. Make sure you have an row vector"; checkok = False #sys.exit(0)
     
-    if not (xlowc==xupc):
-        print "Sorry! The dimensions have to be the same"; checkok = False #sys.exit(0)    
+    # if not (xlowc==xupc):
+    #    print "Sorry! The dimensions have to be the same"; checkok = False #sys.exit(0)    
 
-    isgreater = xlow<xup
-
-    for i in range(isgreater.shape[1]) :
-      if not isgreater.item(i):
+    if not np.all(xlow<xup):
             print "Please check the upper bounds and the lower bounds"; checkok = False #sys.exit(0)
     
     return checkok
@@ -27,15 +24,15 @@ def checkdesignlimits(xlow,xup,x):
     # Check if the point x is within the design limits. If not it is pushed/pulled back into the design limits.
     # Evaluating the design limit constraints.
     t = np.array(x<xlow)
-    for i in range(t.shape[1]):
+    for i in range(t.shape[0]):
         if t.item(i):
-            x[0,i]=xlow[0,i]
+            x[i]=xlow[i]
 
     t1 = np.array(x>xup)
     # for the positive values
-    for j in range(t1.shape[1]):
+    for j in range(t1.shape[0]):
         if t1.item(j):
-            x[0,j]=xup[0,j]; #print "x",x        
+            x[j]=xup[j]; #print "x",x        
     return x
     
 def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
@@ -59,11 +56,11 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     
     Alfa = 1.3                # Reflection Distance
     IterMax = 30               # Maximum number of iterations for the correcting the reflection point.
-    MaxEvals = 500          # Maximum number of complex iterations
+    MaxEvals = 5000          # Maximum number of complex iterations
     IterationsMax = 5000      # Maximum number of Iterations of the Complex method
     b = 4.0                   # Constant used when moving the newpoint towards the center and best
-    TolFunc = 0.00001        # Tolerance for function convergence
-    TolX = 0.0001             # Tolerance for parameter convergence - Not implemented
+    TolFunc = 0.0001        # Tolerance for function convergence
+    TolX = 0.001             # Tolerance for parameter convergence - Not implemented
     Gamma = 0.3
     Rfak = 0.3;               # Radomization factor 
     NoEvals=0                 # Count of Number of Function evaluation
@@ -76,11 +73,11 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     allf=[];
     
     #Get the number of rows and columns of xlow, xup  
-    xlowr,xlowc = xlow.shape[0],xlow.shape[1] 
-    xupr,xupc = xup.shape[0],xup.shape[1]
+    xlowr = xlow.shape[0] 
+    xupr = xup.shape[0]
     
-    Nparams = xlowc;            # Number of optimization parameters
-    xmin = np.zeros([xlowc]) 
+    Nparams = xlow.size            # Number of optimization parameters
+    xmin = np.zeros([xlowr]) 
     
     if Nparams == int(1):
 		k=3;   
@@ -90,7 +87,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     kf = 1 - math.pow((Alfa/2),(Gamma/k))
 
     # Check if inputs are correct
-    firstcheck = firstChecks(xup,xlow,xlowr,xupr,xlowc,xupc)
+    firstcheck = firstChecks(xup,xlow)
     if not firstcheck == True:
        print "Oops! Process terminated"
        sys.exit(0)
@@ -104,14 +101,13 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     else:
        x=sample_vector.Sample_Uniform(xlow,xup,k)
     
-
     
     # This is the starting function value of complex space 
     NoEvals = k
     f=np.zeros([k,1])
     for i in range(0,x.shape[0]):
 		 f[i,0]=complex_func(obj,np.array(x[i,:]))
-   
+  
     allf = f.copy() # Maintain all function values
     allx = x.copy() # Maintain all design variable values
     
@@ -152,12 +148,12 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         
         # Check if the reflected point is within the design limits. Push/Pull the points to the extremums if it crosses over
         xnew = checkdesignlimits(xlow,xup,x_1)
-        
         # Substiture the point back into the complex
-        x[fworstind]=xnew[0,:] 
+        x[fworstind]=xnew[:] 
 
         # Updating f with the reflected point
-        f[fworstind,0] = complex_func(obj,xnew[0,:])
+        
+        f[fworstind,0] = complex_func(obj,xnew[:])
         NoEvals += 1
 
         # New function index calculation
@@ -171,18 +167,17 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
             xnew_ = ((xc*(1.0-a) + x[fworstind_new,:]*a) + xnew)/2.0
             
             xnew2 = checkdesignlimits(xlow,xup,np.array(xnew_))
-            x[fworstind_new]=xnew2[0,:]
+            x[fworstind_new]=xnew2[:]
             
             xnew = xnew2;     
 
             # Updating f with the reflected point
-            f[fworstind_new,0] = complex_func(obj,xnew2[0,:])
+            f[fworstind_new,0] = complex_func(obj,xnew2[:])
             allf = np.vstack((allf,f[fworstind_new,0]))
             NoEvals += 1
             
             # Function index calculation
             fworstind_new,fbestind_new =f.argmax(),f.argmin()
-            
             itera += 1
                          
             if fmin > f[fworstind_new,0]: # Not needed in this while loop
@@ -218,8 +213,8 @@ if __name__=="__main__":
   import objfunc4 as obj
   samplingmethod = "LHS"
   funcname=obj.install
-  xlow=np.array([[-512,-512]])
-  xup=np.array([[512,512]])
+  xlow=np.array([-512,-512])
+  xup=np.array([512,512])
   
   for i in range(1):
     xmin,fmin,funcVector,allf,Iterations= apply(funcname,xlow,xup,samplingmethod)
