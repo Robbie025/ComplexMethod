@@ -32,7 +32,7 @@ def install(a):
  
 if __name__ == "__main__":
  
- x=np.array([[1.2,2.2,-1.3]])
+ x=np.array([1.2,1.2,1.2])
  print "x = ",x, " and the function value is ", install(x)
  print " Should be two for [[1.2,1.2]] and three for  [[1.2,1.2,1.3]] and one  for [[1.2,2.2,-1.2]] " 
 

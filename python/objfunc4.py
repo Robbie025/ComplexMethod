@@ -36,5 +36,5 @@ f(x1,x2) = -(x2+47) * sin( sqrt( abs(x2+x1/2+47) ))- x1 * sin( sqrt( abs(x1 - (x
         return objval
  
 if __name__ == "__main__":
- x =np.array([[512,404.2319]])
+ x =np.array([512,404.2319])
  print "x= ",x," func value = ",install(x)," should be -959.6407 for [[512,404.23]] " 
