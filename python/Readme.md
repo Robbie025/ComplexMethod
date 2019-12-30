@@ -16,9 +16,9 @@ References
 Contact:
 Johan Ölvander
 Division of Machine Desin
-Separtment of Management and Engineering
+Department of Management and Engineering
 Linköping University
-Sweden -581 83
+Sweden - 581 83
 
 email: johan.olvander@liu.se
 

@@ -32,7 +32,7 @@ def install(a):
     return objval
 
 if __name__ == "__main__":
- x=np.array([-2.90354,-2.90354,-2.90354,-2.90354,-2.90354,-2.90354])
+ x=np.array([-2.90354,-2.90354])
  print install(x)," should be same as ",-39.16599*np.size(x)
 
 

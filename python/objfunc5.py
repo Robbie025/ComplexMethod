@@ -10,7 +10,7 @@ http://en.wikipedia.org/wiki/Rosenbrock_function
 
  f(x1,x2) = 100*(x1^2-x2)^2 + (1-x1)^2
 
- Suggested limits: -9 <= xi <= j  where  i = (1,2, ...)  
+ Suggested limits: -9 <= xi <= 9  where  i = (1,2, ...)  
  Optimal Values *: x*= [1,1] f*= 0;
 
  Usage:
@@ -26,9 +26,11 @@ http://en.wikipedia.org/wiki/Rosenbrock_function
         
         a=np.array(x)
         ObjVal = 0.0;
-	x1= a.item(0)
-        return (x1*x1)*a.size
+        for i in range(a.size):
+            x1= a.item(i)
+            ObjVal = ObjVal + (x1*x1)
+        return ObjVal 
 
 if __name__ == "__main__":
-    x=np.array([-5,-0,-5])
-    print x,"Value= ",install(x)," and should be zero for x is zero for [1,1,1]"
+    x=np.array([-9,9,-9])
+    print x,"Value= ",install(x)," and should be 75 for x for [-5,5,-5]"

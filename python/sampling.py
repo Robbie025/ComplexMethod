@@ -7,7 +7,6 @@ def Sample_Uniform(xlow=np.array([-5,-5,-5]),xup=np.array([5,5,5]),k=10):
     xlow and xup and two numpy arrays with xlow.shape == xup.shapem. The default values are xlow.shape = (1,3).
 
     This is also referred to as random sampling.
-    http://en.wikipedia.org/wiki/Latin_hypercube_sampling
     
     This function will return an numpy array x with x.shape = (k,3), which have bounds between xlow and xup
     """
@@ -34,6 +33,7 @@ def Sample_LHC(xlow=np.array([-5,-1,1]),xup=np.array([5,1,5]),k=10,shuffle = Fal
     """
     xlowr = xlow.shape[0]   
     xupr = xup.shape[0]
+    
     if xlowr==xupr and xlowr==xlow.size:
         x=np.zeros((k,xlowr))
         step1 = [np.linspace(xlow.item(i),xup.item(i),k+1) for i in range(xlow.shape[0])]
@@ -60,14 +60,15 @@ def Sample_Debug(xlow=np.array([-5,-1,1]),xup=np.array([5,1,5]),k=10):
     xupr = xup.shape[0]
     if xlowr==xupr and xlowr==xlow.size:
         x=np.zeros((k,xlowr))
-        step1 = [np.linspace(xlow.item(i),xup.item(i),k,endpoint=False) for i in range(xlow.shape[0])]
+        step1 = [np.linspace(xlow.item(i),xup.item(i),k,endpoint=True) for i in range(xlow.shape[0])]
         x = np.array(step1).T
         return x
                       
 if __name__=="__main__":
-  xlow=np.array([-5,-5,-5])
-  xup=np.array([5,5,5])
-  k=10
+  xlow=np.array([-12,-12])
+  xup=np.array([12,12])
+  print("xlow,xup = ",xlow,xup)
+  k=5
   shuffle=False
   print "Uniform Sampling"
   x=Sample_Uniform(xlow,xup,k)
