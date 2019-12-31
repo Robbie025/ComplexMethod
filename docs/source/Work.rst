@@ -165,8 +165,8 @@ example:
 
 ::
 
-	 X_low = [-5.148 -5.148]
-     X_up =  [5.148 5.148]
+     X_low = [-2.048 -2.048]
+     X_up =  [2.048 2.048]
      [X,F] = complexrf('dejong2',X_low,X_up,'maxeval',500)
 
 
