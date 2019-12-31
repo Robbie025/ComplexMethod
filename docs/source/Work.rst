@@ -47,7 +47,7 @@ To install git from a terminal run:
 
 	$ sudo apt-get install git 
 
-Once you have git installed, then it is quite easy to download the code onto your local drive. This process is called *cloning* and it will create a clone of the ComplexMethod repository.
+Once you have git installed, clone a copy of the repository from github. 
 
 In a terminal window:
  ::
@@ -71,18 +71,21 @@ Links to install python and numpy:
 Sphinx
 ------
 
-Sphinx is used for documentation of the project. To install sphinx, in a terminal window run:
+Sphinx is used for documentation of the project and is not needed to run the complexmethod. If you commit the changes properly, readthedocs will update the documentaiton automatically. To install sphinx, in a ubuntu terminal window run:
 
 ::
 
 	$ sudo apt-get install python-sphinx
+For installation on other platforms see :
 
+
+
+	|  https://www.sphinx-doc.org
 The source files can be found in the *source* folder. To build the documentation, in a terminal window run:
 
 :: 
 	
 	make html
-	make latexpdf
 Remember that latex must be installed for building the math equations. For ubuntu pcs: 
 
 ::
@@ -111,7 +114,7 @@ The python version of the complexmethod is divided into four.
 
 
 1. Complexpy.py - This source file contains the implemenation of the complex method in python. Typically, the user need not edit this file, unless there is a need to change certain parameter values such as tolerance limits, reflection distance etc. If you would like to read a theoritical decription of the complex method, please read the next section titled **Description**.
-2. objfunc*.py - This source file contains the implementation of the objective function that you would like to minimize. Currently, the file contains one function definition (install) that takes a numpy value and returns the objective function value.  The user can try to add your own objective fuction. The user can simply use the existing file as a template. There is an excellant wiki where mathematical test functions are listed -- search for *optimization test function*.
+2. objfunc*.py - This source file contains the implementation of the objective function that you would like to minimize. Currently, the file contains one function definition (install) that takes a numpy value and returns the objective function value.  The user can try to add their own objective fuction. The user can simply use the existing file as a template. There is an excellant wiki where mathematical test functions are listed -- search for *optimization test function*.
 
 3. start.py - This python file is used to run the optimiation. You can think of it as the glue between the complexpy.py and objfunc.py. Of course there is no need to use this file as you can run the optimiztion process from a python interpreter. For example, to run the optimization with complexmethod on objfunc, run the following commands in a terminal window
 
@@ -154,6 +157,16 @@ Complex Method -- Matlab
 
 	More information comming soon ....
 
-        This code is part of the *TMKT48 - Design Optimization* given at the Division of Machine Design, Linköping University, Sweden. Documentation can also be found in the souce files.
+		The complex method in matlab is provided in the /matlab folder for matlab users. complexrf.m contains the complex method.
+Several sample functions are also provided. This code is part of the *TMKT48 - Design Optimization* given at the Division of Machine Design, Linköping University, Sweden. Documentation can also be found in the souce files.
+
+
+example:
+
+::
+
+	 X_low = [-5.148 -5.148]
+     X_up =  [5.148 5.148]
+     [X,F] = complexrf('dejong2',X_low,X_up,'maxeval',500)
 
 
