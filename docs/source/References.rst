@@ -14,7 +14,7 @@ References
 	#. Nelder J. A. and Mead R., “A simplex method for function minimization”, Computer Journal, Volume 7, pages 308-313, 1965
 	#. Holland H. J., "Adaptation in Natural and Artificial Systems, an introductory analysis with application to biology, control and artificial intelligence". Ann Arbor, The university of Michigan Press, 1975.
 	#. Krus P. and Andersson J., “Optimizing Optimization for Design Optimization”, in Proceedings of ASME Design Automation Conference, Chicago, USA, September 2-6, 2003.
-	#. Andersson J.,; "Multiobjective Optimization in Engineering Design - Application to Fluid Power Systems."; Doctoral thesis; Division of Fluid and Mechanical Engineering Systems, Department of Mechanical Engineering, Linkping University, Sweden, 2001 	
+	#. Andersson J., "Multiobjective Optimization in Engineering Design - Application to Fluid Power Systems", Doctoral thesis; Division of Fluid and Mechanical Engineering Systems, Department of Mechanical Engineering, Linköping University, Sweden, 2001 	
 	#. Krus P., Ölvander J., "Performance Index and Meta Optimization of a Direct Search Optimization Method", Engineering Optimization, Volume 45, Issue 10, pages 1167-1185, 2013.
 
 
