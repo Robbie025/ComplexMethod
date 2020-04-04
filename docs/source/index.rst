@@ -1,4 +1,4 @@
-The Complex Method
+The Complex-RF Method
 =====================
 
 Contents:
@@ -8,6 +8,9 @@ Contents:
    :numbered:
 
    Work
+   SoftwarePrerequisites
+   ComplexMethodPython
+   ComplexMethodMatlab
    Description
    Contact
 
