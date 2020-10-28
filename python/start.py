@@ -1,117 +1,60 @@
-import numpy as np,complexpy  
+import numpy as np
+import complexpy  # Implementation of complexpy
 import sys,time
+import time as t
 
+startime = t.perf_counter()
 
-def apply(func, xlow, xup,samplingmethod): # 1
-     return complexpy.complexpy_(func,xlow,xup,samplingmethod) # 2
+def apply(func, xlow, xup,samplingmethod,option):  
+     return complexpy.complexpy_(func,xlow,xup,samplingmethod,option)  
+
+"""
+USER: The function definition.  
+for e.g. import objfunc2 as obj Which refers to the filename objfunc2.py
+obj.install refers to the implementation which is objfunc2.install 
+"""
+import objfunc5 as obj  
+funcname=obj.install
 
 
 """
 USER:  Sampling method: Choose the method to create the first set of random numbers.
 Your options are based on sampling.py
 
-samplingmethod = "LHS"
-samplingmethod = "Debug"
-amplingmethod = "Uniform"
+samplingmethod = "LHS" or "Debug" or "Uniform"
 For "LHS" add the shuffle = True/False
 """
 samplingmethod = "LHS"
-shuffle=False
+option=True
 
+
+# NE is the number of times complexpy will be run.
 NE=10
 
 
-# OBJFUNC  --------- OBJFUNC
 """
 USER: Please Enter the bounds of the objective function
-USER: Please enter the objfunc module and define the function in the next two lines
+This was done for the Objfunc.py
+xlow=np.array([-2.048,-2.048])
+xup=np.array([2.048,2.048]
 """
-import objfunc2 as obj  
-funcname=obj.install
-# This was done for the Objfunc.py
-#xlow=np.array([-2.048,-2.048])
-#xup=np.array([2.048,2.048])
-xlow=np.array([-5.12,-5.12])
-xup=np.array([5.12,5.12])
+xlow=np.array([-1500,-1500])
+xup=np.array([1500,1500])
+
+# Variables for outputs
 c=0
-start_=time.time()
+#start_=time.time()
 np.set_printoptions(precision=3)
-#print "\ni \t \t xmin \t\t\tfmin \t No.Of Evaluations \t Iterations"
+print("{:12}".format("No."), '{:15}'.format("xmin"), "{:8}".format("fmin"), "{:12}".format("Iterations"), "{:7}".format("Evals"), "{:4}".format("conv") ) 
+ 
 for i in range(NE):
-    xmin,fmin,funcVector,allf,Iterations,conv,noofevaluations= apply(funcname,xlow,xup,samplingmethod)
-    print "{:4}".format(i+1),'{:>17}'.format(np.array2string(xmin)),"{:8.4f}".format(fmin),"{:4}".format(Iterations), "{:4}".format(noofevaluations) #,"\t","{:7.3f}".format(time.time()-start_)
-    #print i+1," [","{:7.4f} ".format(xmin.item(0)),"{:7.4f}".format(xmin.item(1)),"] ","{:8.4f}".format(fmin),"\t",allf.shape[0],"\t",Iterations #,"\t","{:7.3f}".format(time.time()-start_)
-
+    xmin,fmin,funcVector,allf,Iterations,conv,noofevaluations=  complexpy.complexpy_(funcname,xlow,xup,samplingmethod,option)
+    print("{:4}".format(i+1), '{:>17}'.format(np.array2string(xmin)), "{:>12}".format(np.array2string(fmin)),"{:8}".format(Iterations), "{:10}".format(noofevaluations), "{:4}".format(conv) ) #,"\t","{:7.3f}".format(time.time()-start_))
     if conv>1:
-        c=c+1
-    start_=time.time()
+         c=c+1
+    #start_=time.time()
 
-#print"Number of times that it has converged c= %s out of %s"%(c,i+1)
+print("Number of times that it has converged c= %s out of %s"%(c,i+1))
 
-
-
-
-# OBJFUNC2  --------- OBJFUNC2
-"""
-USER: Please enter the objfunc module and define the function in the next two lines
-import objfunc2 as obj  
-funcname=obj.install
-# This was done for the Objfunc2.py
-xlow=np.array([[-5.12,-5.12]])
-xup=np.array([[5.12,5.12]])
-start_=time.time()
-np.set_printoptions(precision=3)
-print "\ni \t \t xmin \t\t\tfmin \t No.Of Evaluations \t Iterations\t time"
-for i in range(NE):
-    xmin,fmin,funcVector,allf,Iterations= apply(funcname,xlow,xup,samplingmethod)
-    print i,"\t",xmin,"\t\t","{:10.6f}".format(fmin),"\t\t",allf.shape[0],"\t\t",Iterations,"\t","{:7.3f}".format(time.time()-start_)
-    start_=time.time()
-
-"""
-
-# OBJFUNC3  --------- OBJFUNC3
-"""
-USER: Please enter the objfunc module and define the function in the next two lines
-import objfunc3 as obj  
-funcname=obj.install
-# This was done for the Objfunc3.py
-xlow=np.array([[-5.12,-5.12]])
-xup=np.array([[5.12,5.12]])
-
-start_=time.time()
-np.set_printoptions(precision=3)
-print "\ni \t \t xmin \t\t\tfmin \t No.Of Evaluations \t Iterations\t time"
-for i in range(NE):
-    xmin,fmin,funcVector,allf,Iterations= apply(funcname,xlow,xup,samplingmethod)
-    print i,"\t",xmin,"\t\t","{:10.6f}".format(fmin),"\t\t",allf.shape[0],"\t\t",Iterations,"\t","{:7.3f}".format(time.time()-start_)
-    start_=time.time()
-
-
-"""
-# OBJFUNC4  --------- OBJFUNC4
-"""
-USER: Please enter the objfunc module and define the function in the next two lines
-import objfunc4 as obj  
-funcname=obj.install
-# This was done for the Objfunc4.py
-xlow=np.array([[-512,-512]])
-xup=np.array([[512,512]])
-
-start_=time.time()
-np.set_printoptions(precision=3)
-print "\ni \t \t xmin \t\t\tfmin \t No.Of Evaluations \t Iterations\t time"
-for i in range(NE):
-    xmin,fmin,funcVector,allf,Iterations= apply(funcname,xlow,xup,samplingmethod)
-    print i,"\t",xmin,"\t\t","{:10.6f}".format(fmin),"\t\t",allf.shape[0],"\t\t",Iterations,"\t","{:7.3f}".format(time.time()-start_)
-    start_=time.time()
-
-    
-"""
-# This is the plotting functions 
-"""
-import matplotlib.pyplot as plt
-line, = plt.plot(allf, '--', linewidth=2)
-dashes = [10, 5, 100, 5] 
-line.set_dashes(dashes)
-plt.show()
-"""
+endtime = t.perf_counter()
+print(f'Total time taken is  {round(endtime-startime,2)}')

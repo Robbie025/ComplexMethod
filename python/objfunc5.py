@@ -21,7 +21,7 @@ http://en.wikipedia.org/wiki/Rosenbrock_function
  >> import objfunc5
 
  >> x=np.array([1,1])
- >> print objfunc5.install(x)
+ >> print( objfunc5.install(x))
         """
         
         a=np.array(x)
@@ -33,4 +33,4 @@ http://en.wikipedia.org/wiki/Rosenbrock_function
 
 if __name__ == "__main__":
     x=np.array([-9,9,-9])
-    print x,"Value= ",install(x)," and should be 75 for x for [-5,5,-5]"
+    print(x,"Value= ",install(x)," and should be 75 for x for [-5,5,-5]")

@@ -25,7 +25,7 @@ def install(a):
  >> import objfunc2
 
  >> x=np.array([[1.2,2.2,-1.]])
- >> print objfunc2.install(x)            
+ >> print(objfunc2.install(x))
  """
  objval=np.sum(np.sum(np.floor(a)))
  return objval
@@ -33,6 +33,5 @@ def install(a):
 if __name__ == "__main__":
  
  x=np.array([1.2,1.2,-1.2])
- print "x = ",x, " and the function value is ", install(x)
- print " Should be two for [[1.2,1.2]] and three for  [[1.2,1.2,1.3]] and one  for [[1.2,2.2,-1.2]] " 
-
+ print("x = ",x, " and the function value is ", install(x))
+ print(" Should be two for [[1.2,1.2]] and three for  [[1.2,1.2,1.3]] and one  for [[1.2,2.2,-1.2]] ")

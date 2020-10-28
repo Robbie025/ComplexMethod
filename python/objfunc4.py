@@ -25,7 +25,7 @@ f(x1,x2) = -(x2+47) * sin( sqrt( abs(x2+x1/2+47) ))- x1 * sin( sqrt( abs(x1 - (x
  >> import objfunc4
 
  >> x=np.array([[1.2,2.2,-1.]])
- >> print objfunc4.install(x)    
+ >> print(objfunc4.install(x))
  
         """
         x1=a.item(0)
@@ -37,4 +37,4 @@ f(x1,x2) = -(x2+47) * sin( sqrt( abs(x2+x1/2+47) ))- x1 * sin( sqrt( abs(x1 - (x
  
 if __name__ == "__main__":
  x =np.array([512,404.2319])
- print "x= ",x," func value = ",install(x)," should be -959.6407 for [[512,404.23]] " 
+ print("x= ",x," func value = ",install(x)," should be -959.6407 for [[512,404.23]] ")

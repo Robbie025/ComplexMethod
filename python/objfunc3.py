@@ -21,9 +21,9 @@ def install(a):
  >> import objfunc3
 
  >> x=np.array([[-2.90354,-2.90354]])
- >> print objfunc3.install(x)
-
+ >> print(objfunc3.install(x))
     """
+
     n=np.size(a)
     objval=0.0
     for i in range(0,n):
@@ -33,6 +33,7 @@ def install(a):
 
 if __name__ == "__main__":
  x=np.array([-2.90354,-2.90354])
- print install(x)," should be same as ",-39.16599*np.size(x)
+ print( install(x))
+ print( install(x)," should be same as ",-39.16599*np.size(x))
 
 

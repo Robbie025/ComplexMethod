@@ -22,17 +22,17 @@ def install(x):
  >> import objfunc
 
  >> x=np.array([[1,1,1,1]])
- >> print objfunc.install(x)
+ >> print(objfunc.install(x))
         """
         
         a=np.array(x)
         ObjVal = 0.0;
         for i in range(a.shape[0]-1):
-			x1= a.item(i)
-			x2= a.item(i+1)
-			ObjVal = ObjVal + 100*math.pow((x1**2-x2),2) + pow((1-x1),2);
-	return ObjVal
+            x1= a.item(i)
+            x2= a.item(i+1)
+            ObjVal = ObjVal + 100*math.pow((x1**2-x2),2) + pow((1-x1),2);
+        return ObjVal
 
 if __name__ == "__main__":
-    x=np.array([-2.048,-2.048])
-    print x,"Value= ",install(x)," and should be zero for x is zero for [1,1,1]"
+    x=np.array([1,1,1])
+    print(x,"Value= ",install(x)," and should be zero for x is zero for [1,1,1]")

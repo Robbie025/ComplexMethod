@@ -42,11 +42,13 @@ def Sample_LHC(xlow=np.array([-5,-1,1]),xup=np.array([5,1,5]),k=10,shuffle = Fal
             xlow_,xup_ = step2[j,],step2[j+1,]
             mylist = [random.uniform(xlow_.item(i),xup_.item(i)) for i in range(xlow.shape[0])]
             x[j,]=mylist 
+
     if shuffle:
-		np.random.shuffle(x)
-		return x
+        np.random.shuffle(x)
+        return x
     else: 
-		return x
+        return x
+
 
 
 def Sample_Debug(xlow=np.array([-5,-1,1]),xup=np.array([5,1,5]),k=10):
@@ -63,6 +65,17 @@ def Sample_Debug(xlow=np.array([-5,-1,1]),xup=np.array([5,1,5]),k=10):
         step1 = [np.linspace(xlow.item(i),xup.item(i),k,endpoint=True) for i in range(xlow.shape[0])]
         x = np.array(step1).T
         return x
+
+def Sample_choice(choice,xlow,xup,k,option=False):
+    if choice == "LHS":
+      return Sample_LHC(xlow,xup,k,shuffle=option)
+    elif choice == "Debug":
+      return Sample_Debug(xlow,xup,k)
+    else:
+      return Sample_Uniform(xlow,xup,k)
+               
+#x=sample_vector.Sample_Uniform(xlow,xup,k)
+
                       
 if __name__=="__main__":
   xlow=np.array([-12,-12])
@@ -70,12 +83,14 @@ if __name__=="__main__":
   print("xlow,xup = ",xlow,xup)
   k=5
   shuffle=False
-  print "Uniform Sampling"
-  x=Sample_Uniform(xlow,xup,k)
-  print x
-  x=Sample_LHC(xlow,xup,k,shuffle)
-  print "Lattice Hypercube Sampling"
-  print x 
-  x=Sample_Debug(xlow,xup,k)
-  print "Debug mode --  Should give the same values again and again"
-  print x
+
+  print("Uniform Sampling \n") 
+  print(Sample_choice("Uniform",xlow,xup,k))
+  
+  
+  print("Lattice Hypercube Sampling \n")
+  print(Sample_choice("LHC",xlow,xup,k,shuffle))
+
+  print("Debug mode --  Should give the same values again and again \b")
+  print(Sample_choice("Debug",xlow,xup,k))
+  

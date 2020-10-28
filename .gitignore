@@ -2,3 +2,4 @@
 *.py.swp
 *.ipynb
 /docs/build*
+.vs/
