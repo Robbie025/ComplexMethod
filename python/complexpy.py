@@ -10,10 +10,10 @@ def firstChecks(xup,xlow):
     xlowr,xupr = xlow.shape[0],xup.shape[0]
     checkok = True
     if xlowr==0 and xupr==0: 
-        print "Only a row vector is allowed. Make sure you have an row vector"; checkok = False #sys.exit(0)
+        print("Only a row vector is allowed. Make sure you have an row vector"); checkok = False #sys.exit(0)
     
     if not np.all(xlow<xup):
-            print "Please check the upper bounds and the lower bounds"; checkok = False #sys.exit(0)
+        print("Please check the upper bounds and the lower bounds"); checkok = False #sys.exit(0)
     
     return checkok
 
@@ -34,7 +34,7 @@ def checkdesignlimits(xlow,xup,x):
             x[j]=xup[j]; #print "x",x        
     return x
     
-def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
+def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
     """ The complexrf method 
     
     References
@@ -57,11 +57,11 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     
     Alfa = 1.3                # Reflection Distance
     IterMax = 30               # Maximum number of iterations for the correcting the reflection point.
-    MaxEvals = 500         # Maximum number of complex iterations
-    IterationsMax = 700      # Maximum number of Iterations of the Complex method
+    MaxEvals = 2000         # Maximum number of complex iterations
+    IterationsMax = 2000      # Maximum number of Iterations of the Complex method
     b = 4                   # Constant used when moving the newpoint towards the center and best
-    TolFunc = 0.000001        # Tolerance for function convergence
-    TolX = 0.00001             # Tolerance for parameter convergence - Not implemented
+    TolFunc = 0.0000001        # Tolerance for function convergence
+    TolX = 0.0001             # Tolerance for parameter convergence - Not implemented
     Gamma = 0.3             # Forgetting Factor
     Rfak = 0.3;               # Randomization factor 
     
@@ -69,7 +69,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     # some initial values
     NoEvals=0                 # Count of Number of Function evaluation
     Iterations=1              # Count of Number of Optimization iteration
-    #fmin=float("inf")
     conv_cond = 0      
     fminV=[]
     allx=[]
@@ -89,9 +88,9 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     Nparams = xlow.shape[0]            
     
     if Nparams == int(1):
-		k=3;   
+	    k=3;   
     else:
-		k=2*Nparams;      
+	    k=2*Nparams;      
 
     # kf implements the forgetting principle. Each objective value will be increased with kf each iteration
     kf = 1 - math.pow( (Alfa/2),(Gamma/k) )
@@ -99,18 +98,23 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
     # Check if inputs are correct
     firstcheck = firstChecks(xup,xlow)
     if not firstcheck == True:
-       print "Checks not passed. Review Code! Process terminated"
+       print("Checks not passed. Review Code! Process terminated")
        sys.exit(0)
     
     # Create a random array, within the limits, to start the optimization Process (x)
     # Currently, there are three strategy to initialize the complex. Please see sampling.py
+
+    """
+    # This can be removed.
     if samplingmethod == "LHS":
       x = sample_vector.Sample_LHC(xlow,xup,k,shuffle=False)
     elif samplingmethod == "Debug":
       x = sample_vector.Sample_Debug(xlow,xup,k)
     else:
        x=sample_vector.Sample_Uniform(xlow,xup,k)
-    
+    """
+
+    x = sample_vector.Sample_choice(samplingmethod,xlow,xup,k,optionsample)
     
     # This is the starting function value of complex space 
     f=np.zeros([k,1])
@@ -142,10 +146,10 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         # This if statment is only if you want to run in the debug mode. 
         # This prints relevant values to debug the complex run for a specific run. checkpdb=2 (see above).
         if (Iterations == checkpdb)  and debugnow:
-            print "\nI am in the outer loop now ", NoEvals, Iterations
-            print "\n x", x 
-            print "\n f",f
-            print "the f values will increase now"
+            print("\n In the outer loop", NoEvals, Iterations)
+            print("\n x", x) 
+            print("\n f",f)
+            print("the f values will increase now")
 
         # Check for convergence of the function and parameter values
         if fmin == 0:
@@ -175,11 +179,11 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         x_1  = xc + ((xc-xworst) * Alfa)
 
         if Iterations == checkpdb and debugnow:
-            print "\nSome inner checks"
-            print "xworst", xworst
-            print "Reflected point x_1", x_1 
-            print "xc", xc
-            print "\n"
+            print("\nSome inner checks")
+            print("xworst", xworst)
+            print("Reflected point x_1", x_1)
+            print("xc", xc)
+            print("\n")
  
 	    # Add some noise to the Reflected Point
         xmax,xmin = np.amax(x,0),np.amin(x,0)
@@ -187,7 +191,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
 
         ri = np.random.rand(Nparams)-0.5
 
-        if Iterations == checkpdb or debugnow:
+        if Iterations == checkpdb and debugnow:
             ri = [-0.3, 0.5] # debug values 
 
         x_11 = x_1 + (Rfak * (xup-xlow) * l1 * ri)
@@ -199,15 +203,16 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         x[fworstind] = xnew[:] 
 
         if Iterations == checkpdb and debugnow:
-            print "\nOuter loop inner checks"
-            print "max( (xmax-xmin) / (xup-xlow) ) or hahaha1", max( (xmax-xmin) / (xup-xlow) )
-            print "xup-xlow",(xup-xlow)
-            print "Rfak * (xup-xlow)",Rfak * (xup-xlow)
-            print "Rfak * (xup-xlow) * l1",Rfak * (xup-xlow) * l1
-            print "Rfak * (xup-xlow) * l1 *  ri", Rfak * (xup-xlow) * l1 * ri
-            print "x_11 + above", x_1 + Rfak * (xup-xlow) * l1 * ri
-            print "xnew", xnew
-            print " "
+            print("\n Outer loop inner checks")
+            print("max( (xmax-xmin) / (xup-xlow) )",max((xmax-xmin) / (xup-xlow)))
+            print("xup-xlow",xup-xlow)
+            print("Rfak * (xup-xlow)",Rfak * (xup-xlow))
+            print("Rfak * (xup-xlow) * l1",Rfak * (xup-xlow) * l1)
+            print("Rfak * (xup-xlow) * l1 *  ri", Rfak * (xup-xlow) * l1 * ri)
+            print("x_11 + above", x_1 + Rfak * (xup-xlow) * l1 * ri)
+            print("xnew", xnew)
+            print()
+            
 
         # Updating f with the reflected point        
         f[fworstind,0] = complex_func(obj,xnew[:])  # update function value of the new point
@@ -218,11 +223,11 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
         
         # Redo the reflection, if the reflected point remains the worst point 
         if Iterations == checkpdb and debugnow:
-            print "I am just before the inner loop now \n", NoEvals, Iterations
-            print "fworstind_new", fworstind_new, "\n"
-            print "\n x",x
-            print "\n f",f
-            print "fmax",f[fworstind_new,0],"\n", fworstind_new
+            print("I am just before the inner loop now \n", NoEvals, Iterations)
+            print("fworstind_new", fworstind_new, "\n")
+            print("\n x",x)
+            print("\n f",f)
+            print("fmax",f[fworstind_new,0],"\n", fworstind_new)
 
         itera=0
         while (fworstind_new == fworstind) and (itera < IterMax) and (NoEvals < MaxEvals):  
@@ -230,18 +235,18 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
 
 
             if Iterations == checkpdb and debugnow:
-                print "\n\nI am in the inner loop now:", NoEvals
-                print "xnew",xnew
-                print "Evals and iter" , NoEvals, itera
-                print "fworstind & fworstind_new", fworstind, fworstind_new
-                print "a", a
+                print("I am in the inner loop now:", NoEvals)
+                print("xnew",xnew)
+                print("Evals and iter" , NoEvals, itera)
+                print("fworstind & fworstind_new", fworstind, fworstind_new)
+                print("a", a)
 
            
             xmax,xmin = np.amax(x,0),np.amin(x,0)
             l1 = max( (xmax -xmin) / (xup-xlow) )
             ri = np.random.rand(Nparams) - 0.5
             
-            if Iterations == checkpdb or debugnow:
+            if Iterations == checkpdb or debugnow: # Some print for debug mode.
                 ri = [-0.3, 0.5] # debug values 
 
             x_11 = (Rfak * (xup-xlow)) * l1 * ri
@@ -252,15 +257,15 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
             x[fworstind,:] = xnew[:]
 
             if Iterations == checkpdb and debugnow:
-                print "\nInner working of the inner loop"
-                print "\nmax( (xmax -xmin)/(xup-xlow) )", max( (xmax -xmin)/(xup-xlow) )
-                print "\n(Rfak * (xup-xlow)) ", (Rfak * (xup-xlow)) 
-                print "\n(Rfak * (xup-xlow)) * l1 * ri", (Rfak * (xup-xlow)) * l1 * ri
-                print "\nxc", xc
-                print "\nxbest", xbest
-                print "\n( (xc*(1.0-a) + xbest * a) + xnew) * 0.5 ", ( (xc*(1.0-a) + xbest * a) + xnew) * 0.5  
-                print "\nxnew ", xnew
-                print "\nxnew_", xnew_,"\n"
+                print("\nInner working of the inner loop")
+                print("\nmax( (xmax -xmin)/(xup-xlow) )", max( (xmax -xmin)/(xup-xlow) ))
+                print("\n(Rfak * (xup-xlow)) ", (Rfak * (xup-xlow)))
+                print("\n(Rfak * (xup-xlow)) * l1 * ri", (Rfak * (xup-xlow)) * l1 * ri)
+                print("\nxc", xc)
+                print("\nxbest", xbest)
+                print("\n( (xc*(1.0-a) + xbest * a) + xnew) * 0.5 ", ( (xc*(1.0-a) + xbest * a) + xnew) * 0.5)  
+                print("\nxnew ", xnew)
+                print("\nxnew_", xnew_,"\n")
 
             # Updating f with the reflected point
             f[fworstind,:] = complex_func(obj,xnew)
@@ -272,9 +277,9 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS"):
             xmax,xmin = x.item(x.argmax()), x.item(x.argmin())
 
             if Iterations == checkpdb and debugnow:
-                 print "\n x",x
-                 print "\n f",f
-                 print "fmax index and fmax",f[fworstind_new,0], fmax, "\n"
+                 print("\n x",x)
+                 print("\n f",f)
+                 print("fmax index and fmax",f[fworstind_new,0], fmax, "\n")
             
             itera += 1 # end of inner loop
 
@@ -296,4 +301,4 @@ if __name__=="__main__":
   xup=np.array([512,512])
 
   xmin,fmin,funcVector,allf,Iterations,condition, NoEvaluations= apply(funcname,xlow,xup,samplingmethod)
-  print xmin,fmin,Iterations
+  print(xmin,fmin,Iterations) 
