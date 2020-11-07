@@ -85,7 +85,8 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
         checkpdb = 1        # which iteration to print out debug values
 
     # Number of optimization parameters
-    Nparams = xlow.shape[0]            
+    Nparams = xlow.shape[0]  
+              
     
     if Nparams == int(1):
 	    k=3;   
@@ -243,13 +244,15 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
 
            
             xmax,xmin = np.amax(x,0),np.amin(x,0)
-            l1 = max( (xmax -xmin) / (xup-xlow) )
+            l1 = np.array(max( (xmax -xmin) / (xup-xlow) ))
             ri = np.random.rand(Nparams) - 0.5
-            
-            if Iterations == checkpdb or debugnow: # Some print for debug mode.
-                ri = [-0.3, 0.5] # debug values 
 
-            x_11 = (Rfak * (xup-xlow)) * l1 * ri
+
+            
+            if Iterations == checkpdb and debugnow: # Some print for debug mode.
+                ri = [-0.3, 0.5, 0.5] # debug values 
+
+            x_11 = (Rfak * (xup-xlow)) * l1*ri
             xnew_ =  ( ( (xc*(1.0-a) + xbest * a) + xnew) * 0.5 ) + x_11
             
             # Check if the reflected point is within the design limits. Push/Pull the points to the extremums if it crosses over
