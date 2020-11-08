@@ -102,19 +102,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
        print("Checks not passed. Review Code! Process terminated")
        sys.exit(0)
     
-    # Create a random array, within the limits, to start the optimization Process (x)
-    # Currently, there are three strategy to initialize the complex. Please see sampling.py
-
-    """
-    # This can be removed.
-    if samplingmethod == "LHS":
-      x = sample_vector.Sample_LHC(xlow,xup,k,shuffle=False)
-    elif samplingmethod == "Debug":
-      x = sample_vector.Sample_Debug(xlow,xup,k)
-    else:
-       x=sample_vector.Sample_Uniform(xlow,xup,k)
-    """
-
+    # Create a random array, within the limits, to start the optimization run. See sampling.py
     x = sample_vector.Sample_choice(samplingmethod,xlow,xup,k,optionsample)
     
     # This is the starting function value of complex space 
@@ -129,6 +117,8 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
     # Calculate some values to start the complex optimization
     fworstind,fbestind = f.argmax(), f.argmin()   # Indicies for the worst and best function values
     fmin,fmax = f[fbestind,0], f[fworstind,0]     # min and max function values
+    fminV = fmin.copy()
+    print(fminV)
         
     xworst,xbest = x[fworstind,:], x[fbestind,:] # x values corresponding to the worst and best function values
     xmax,xmin = np.amax(x,0), np.amin(x,0)       # numberically minimum and maximum x values
@@ -151,6 +141,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
             print("\n x", x) 
             print("\n f",f)
             print("the f values will increase now")
+
 
         # Check for convergence of the function and parameter values
         if fmin == 0:
@@ -193,7 +184,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
         ri = np.random.rand(Nparams)-0.5
 
         if Iterations == checkpdb and debugnow:
-            ri = [-0.3, 0.5] # debug values 
+            ri = [-0.3, 0.5] # debug values. OR operator creates bad results
 
         x_11 = x_1 + (Rfak * (xup-xlow) * l1 * ri)
 
@@ -290,6 +281,8 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
         allf = np.vstack( (allf,[f[fbestind,0], abs( abs(fmax) - abs(fmin) ) ] ) )
         xappend = np.hstack( (x[fbestind], l1 ) )
         allx = np.vstack( (allx, xappend ) )
+        fminV = np.vstack( (fminV, fmin ) )
+
  
     return x[fbestind,:], fmin, fminV, allf, Iterations, conv_cond, NoEvals
     
