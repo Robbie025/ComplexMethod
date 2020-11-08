@@ -57,10 +57,10 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
     
     Alfa = 1.3                # Reflection Distance
     IterMax = 30               # Maximum number of iterations for the correcting the reflection point.
-    MaxEvals = 2000         # Maximum number of complex iterations
-    IterationsMax = 2000      # Maximum number of Iterations of the Complex method
+    MaxEvals = 500         # Maximum number of complex iterations
+    IterationsMax = 30      # Maximum number of Iterations of the Complex method
     b = 4                   # Constant used when moving the newpoint towards the center and best
-    TolFunc = 0.0000001        # Tolerance for function convergence
+    TolFunc = 0.00001        # Tolerance for function convergence
     TolX = 0.0001             # Tolerance for parameter convergence - Not implemented
     Gamma = 0.3             # Forgetting Factor
     Rfak = 0.3;               # Randomization factor 
