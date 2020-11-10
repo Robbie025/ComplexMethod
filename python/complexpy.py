@@ -118,7 +118,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
     fworstind,fbestind = f.argmax(), f.argmin()   # Indicies for the worst and best function values
     fmin,fmax = f[fbestind,0], f[fworstind,0]     # min and max function values
     fminV = fmin.copy()
-    print(fminV)
         
     xworst,xbest = x[fworstind,:], x[fbestind,:] # x values corresponding to the worst and best function values
     xmax,xmin = np.amax(x,0), np.amin(x,0)       # numberically minimum and maximum x values

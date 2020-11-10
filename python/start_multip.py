@@ -13,7 +13,7 @@ USER: The function definition.
 for e.g. import objfunc as obj Which refers to the filename objfunc.py
 install refers to the implementation in objfunc
 """
-from objfunc5 import install as obj
+from objfunc import install as obj
  
 
 
@@ -38,7 +38,7 @@ xlow=np.array([-1500,-1500])
 xup=np.array([1500,1500])
 
 # NE is the number of times complexpy will be run.
-NE=1000
+NE=2000
 
 
 if __name__ == "__main__":
