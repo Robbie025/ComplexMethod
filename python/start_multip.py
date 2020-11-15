@@ -34,8 +34,8 @@ This was done for the Objfunc.py
 xlow=np.array([-2.048,-2.048])
 xup=np.array([2.048,2.048]
 """
-xlow=np.array([-1500,-1500])
-xup=np.array([1500,1500])
+xlow=np.array([-15,-15])
+xup=np.array([15,15])
 
 # NE is the number of times complexpy will be run.
 NE=2000

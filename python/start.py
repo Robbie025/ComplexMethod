@@ -30,7 +30,7 @@ option=False
 
 # User: NE = number of complexpy calls.
 # For large number (NE>1000) try start_multip.py
-NE=10
+NE=2000
 
 
 """
@@ -39,7 +39,7 @@ This was done for the Objfunc.py
 xlow=np.array([-2.048,-2.048])
 xup=np.array([2.048,2.048]
 """
-xlow=np.array([-1,-15])
+xlow=np.array([-15,-15])
 xup=np.array([15,15])
 
 """
