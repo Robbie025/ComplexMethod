@@ -1,10 +1,18 @@
 
 Software Prerequisites
 ==========
+
+There are two version of the ComplexMethod available. 
+An implementation in python as well as in Matlab. 
+The documentation is written using Sphinx. 
+To use the python code located in ComplexMeethod/python, Python 3.8.x (or higher) along with numpy are needed. The matlab source files require Matlab from MathWorks. 
+
+The terminal based installation given here are for ubuntu based systems. Nonetheless, the source code for python and matlab should work in mac and windows systems, provided the necessary packages are installed.
+
 Git
 ----
 
-To clone the complexmethod repository, git must be installed in your system. The following links will help you understand the basics of git, which is prerequisite if you would like to use the code and contribute to this project.
+Git is optional and is not required to run the optimizer. To clone the complexmethod repository, git must be installed in your system. The following links will help you understand the basics of git, which is prerequisite if you would like to use the code and contribute to this project.
 
 	| http://git-scm.com/book/en/v2
 	| https://guides.github.com/introduction/flow/index.html
@@ -36,6 +44,7 @@ Links to install python and numpy:
 	| https://www.python.org/downloads/
 	| http://www.numpy.org/
 
+
 Sphinx
 ------
 
@@ -45,8 +54,6 @@ Sphinx is used for documentation of the project and is not needed to run the com
 
 	$ sudo apt-get install python-sphinx
 For installation on other platforms see :
-
-
 
 	|  https://www.sphinx-doc.org
 The source files can be found in the *source* folder. To build the documentation, in a terminal window run:
@@ -72,7 +79,7 @@ You need Matlab from mathworks to run the code. The intention is to have code co
 More Information
 -----------------
 
-If you interested in more information, please check out this site. It has tons of information to get you started on the software development process.
+If you are interested in more information, please check out this site. It has tons of information to get you started on the software development process.
 	http://toolbox.readthedocs.org/en/latest/
 
  

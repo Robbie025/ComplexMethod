@@ -5,7 +5,7 @@ Complex Method -- Matlab
 
 	More information comming soon ....
 
-		The complex method in matlab is provided in the /matlab folder for matlab users. complexrf.m contains the complex method.
+		The complex method implemented in matlab is located in the ComplexMethod/matlab folder.  
 Several sample functions are also provided. This code is part of the *TMKT48 - Design Optimization* given at the Division of Machine Design, Linköping University, Sweden. Documentation can also be found in the souce files.
 
 

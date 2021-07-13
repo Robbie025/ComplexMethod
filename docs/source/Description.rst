@@ -1,14 +1,16 @@
-Complex Method -- Description
-===========
+The Complex Method
+============
 
 The Complex method was first presented by Box [1], and later improved by Guin [2]. 
 The method is a constraint simplex method, hence the name Complex, developed from the Simplex method by Spendley et al [3] and Nelder Mead, [4]. Similar related methods go under names such as Nelder-Mead Simplex. The main difference between the Simplex method and the complex method is that the Complex method uses more points during the search process.
 
+The first part of this chapter describes the original Complex Method followed by a description of the Complex-rf, which is development of the Complex Method.
+
+
 The Complex Method
 ******************
 
-In the Complex method, the word complex refers to a geometric shape with :math:`k \geq n+1`
-, points in an n-dimensional space. 
+In the Complex method, the word complex refers to a geometric shape with :math:`k \geq n+1`, points in an n-dimensional space. 
 These k points are known as vertices of the complex. 
 To make the explanation of the algorithm simple we wiill focus on a two-dimensional space and a complex consisting of four vertices, i.e. n = 2 and  k = 4.
 
@@ -136,7 +138,6 @@ the new point in accordance to equation eq:`ten`
 
 The random noise is calculated according to
 
-
 .. math:: r_f = r_{fac} * max\left( { \frac{ \triangle {x_{i}}} {{x_i}^u - {x_i}^l} }\right)  \left( {x_i}^u - {x_i}^l \right) \left(R-0.5\right)
    :label: eleven
 
@@ -144,7 +145,9 @@ where  :math:`r_{fac}` is a randomization factor, :math:`x^{l}` and  :math:`x^{u
 spread in the i:th variable of the complex, and :math:`R` is a random variable in the interval
 [0.1]. This formulation implies that the noise added is a function of the convergence  :math:`(\triangle{x_{i}})`, and the shape of the original design space, i.e. the variable limits. 
 Furthermore, the formulation makes it possible for the complex to maintain diversity and also regain lost
-dimensionality. Since the noise is a function of the maximum spread, perturbations could
+dimensionality. 
+
+Since the noise is a function of the maximum spread, perturbations could
 be added to dimensions in which the complex has already converged. This facilitates
 avoidance of local optima. The randomization factor thus makes the method more robust
 in finding the global optima to the cost of somewhat slower convergence. Experiments
@@ -157,20 +160,20 @@ varies over time. In that case, old objective function values become increasingl
 unreliable and should be replaced by new ones. This is particularly true if the
 optimization is to be used to optimize parameters in a real process. In this case there may
 be drift in the parameters of the physical system. Introducing a forgetting factor has also
-been found to improve the success rate in other situations as well. One such situation is if
-the objective function is noisy, i.e. there are local variations in the objective function
+been found to improve the success rate in other situations as well. 
+
+One such situation is if the objective function is noisy, i.e. there are local variations in the objective function
 between points close to each other in parameter space, or if the objective function has a
 discrete nature with flat plateaus. The basic principal of the forgetting factor is to
 continuously deteriorate objective function values The underlying mathematics of the
 forgetting factor is described in detail in [6].
-In [6] all parameters of the Complex algorithm are optimized in order to find the
+In [6], all parameters of the Complex algorithm are optimized in order to find the
 parameter set that gives the best possible performance of the algorithm. It is then
 concluded that 
 :math:`\alpha = 1.5`, 
 :math:`r_{fac} = 0.3` and
 :math:`\gamma = 0.3` give a good performance of the algorithm.
-The complex method has been applied to a wide range of problems such as physics
-, structural engineering, fluid power system design and aerospace
+The complex method has been applied to a wide range of problems such as physics, structural engineering, fluid power system design and aerospace
 engineering.
 
 .. include:: ../source/References.rst
