@@ -10,5 +10,8 @@ Mention this info in the commit log as well
 	#. Code needs to be well commented. On going work. Needs to connect the documentation equation to the software implemenation. Needs to start with the matlab code as well.
 	#. IDEA: make a table which shows different iterations, sort of as an example. For the documentation
 	#. Can we have a website which can show an animation/plotting. Not hard wired, but live runs.
+	#. Rework the folders to make it consistent with a standard python package
+	#. Should we remove the matlab files? 
+	#. rework all files to match the new folder structure 
 
 
