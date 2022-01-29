@@ -13,5 +13,6 @@ Mention this info in the commit log as well
 	#. Rework the folders to make it consistent with a standard python package -- DONR
 	#. Should we remove the matlab files? -- DONE
 	#. rework all files to match the new folder structure -- DONR 
+	#. make a yaml to run a configurable start.py so that only one setup.py is needed. 
 
 
