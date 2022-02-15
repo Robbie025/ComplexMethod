@@ -1,5 +1,6 @@
 import argparse
 import concurrent.futures
+from doctest import DocTestFailure
 import importlib
 import sys
 import time as t
@@ -9,23 +10,12 @@ import numpy as np
 
 import src.complexpy as cp  # Implementation of complexpy
 
-# python3 testpythonfunc.py --xup "512 512" --xlow '-512 -511'
-# python3 testpythonfunc.py --xup "512 512" --xlow '-512 -511' --objf 'src.testfunctions.objfunc5' --simple 'False'
+# USAGE:
+# python3 setup.py --xup "512 512" --xlow '-512 -511'
+# python3 setup.py --xup "512 512" --xlow '-512 -511' --objf 'src.testfunctions.objfunc5' --simple 'False'
 
 
 
-"""
-USER:  Sampling method: Choose the method to create the first set of random numbers.
-Your options are based on sampling.py
-
-samplingmethod = "LHS" or "Debug" or "Uniform"
-For "LHS" add the shuffle = True/False
-"""
-
-
- 
-# USAGE: testfunctionfunc -l [-15,-15] -u [ 15, 15] -n 100
-# USAGE: python3 testfunctionfunc
 
 def linearprocesscomplexserarch():
     return 0
@@ -33,20 +23,42 @@ def linearprocesscomplexserarch():
 def multiprocesscomplexserarch():
     return 0
 
+def printresults():
+    if n==1:
+        print("Only the table header")
+    if args.detailed == True:
+        print('Current result')
+    else:
+            print('skik this')
+    return 0
+
+
+
 if __name__ == "__main__":
 
     """
     User can edit these default values when runing this file in a python interpretor. 
     TO DO: the if else statment to run either a default_process as well as dagult_simple
     """
-    default_xlow = '-5.0 -5.0' # Default values for lower bound e.g. '-512.0 -512.0'
-    default_xup =  '5.0 5.0'  # Default values for upper bound  e.g. '512.0 512.0'
-    default_samplingmethod = 'uniform' # see sampling.py try: Uniform, LHC, DEBUG
+    # Default values for lower bound e.g. '-512.0 -512.0'
+    default_xlow = '-5.0 -5.0' 
+
+    # Default values for upper bound  e.g. '512.0 512.0'
+    default_xup =  '5.0 5.0'  
+    
+    # Sampling method. Two option right now: Uniform, LHC, DEBUG. Debug not implemented
+    default_samplingmethod = 'uniform'
     default_samplingmethod_option = False # True for shuffling the initial sample. Does not really help?
-    default_objfunc = "src.testfunctions.objfunc5" # relative to where this file is stored. 
-    default_n = 100 # n - How many runs do you want to run?
+
+    # relative to path of this file. Objective function definitions. more work to be done. see src/testfunctions. 
+    default_objfunc = "src.testfunctions.objfunc5" 
+    
+    # n - How many runs do you want to run?
+    default_n = 100 
     
     
+    # ************************************************
+    """ The arguments that can used to run setup.py """
 
     # This is for arguments that are passed in through a Terminal. Is this really useful?
     parser = argparse.ArgumentParser(description='test function')
@@ -94,12 +106,12 @@ if __name__ == "__main__":
                     default=False)
 
     args = parser.parse_args()
-
+    # ************************************************
    
     #Getting the objective function handler from the arguments
     arg_function = args.objf    
     objfuncHandle = importlib.import_module(arg_function, ".")
-    funcname = objfuncHandle.install
+    funcname = objfuncHandle.install # User might want to change this if they have a different name for function call.
   
     
     # Workaround to get the string xlow and xup into numpy arrays 
@@ -107,8 +119,6 @@ if __name__ == "__main__":
     xlow, xup = np.zeros([len(smallx)]), np.zeros([len(largex)])
     for i in range(len(largex)):
         xlow[i], xup[i] = smallx[i], largex[i]
-
-
  
 
     """
@@ -130,7 +140,7 @@ if __name__ == "__main__":
         print("{:12}".format("No."), '{:16}'.format("xmin"), "{:8}".format("fmin"), "{:10}".format("Iterations"), "{:7}".format("Evals"), "{:4}".format("conv") ) 
         
         for i in range(args.n):
-            xmin,fmin,funcVector,allf,Iterations,conv,noofevaluations=  cp.complexpy_(objfuncHandle.install,xlow,xup,samplingmethod,option)
+            xmin,fmin,funcVector,allf,Iterations,conv,noofevaluations=  cp.complexpy_(funcname,xlow,xup,samplingmethod,option)
             if (args.detailed==False and  ( (i+1) == args.n)):
                     print("{:2}".format(i+1),"/",args.n,'{:>17}'.format(np.array2string(xmin)), "{:>12}".format(np.array2string(fmin)),"{:8}".format(Iterations), "{:10}".format(noofevaluations), "{:4}".format(conv) ) #,"\t","{:7.3f}".format(time.time()-start_))
             
@@ -148,7 +158,7 @@ if __name__ == "__main__":
     if args.process:
         print("ahshit")
         with concurrent.futures.ProcessPoolExecutor() as executor:
-            arg=[objfuncHandle.install,xlow,xup,samplingmethod,option]
+            arg=[funcname,xlow,xup,samplingmethod,option]
             e1 = [executor.submit(cp.complexpy_,*arg) for _ in range(args.n)]
           
             i, c = 0, 0 # i is counter for number of runs; c is the number of converged runs
