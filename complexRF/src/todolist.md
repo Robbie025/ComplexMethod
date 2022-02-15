@@ -4,15 +4,10 @@ To Do list
 Here we document the work that has to be done and what has been completed. 
 Mention this info in the commit log as well
 
-	1. Number of complexrf runs  (see start.py ) needs to be multithreaded. low priority
- 	2. In start.py the output needs to be formatted nicely. --  Can be marked completed. 202000402
+	1. Documentation to be completed. This is lacking now.  
+ 	2. Iterations and maxevaluations coould be in the argparam list. 
 
-	#. Code needs to be well commented. On going work. Needs to connect the documentation equation to the software implemenation. Needs to start with the matlab code as well.
 	#. IDEA: make a table which shows different iterations, sort of as an example. For the documentation
 	#. Can we have a website which can show an animation/plotting. Not hard wired, but live runs.
-	#. Rework the folders to make it consistent with a standard python package -- DONR
-	#. Should we remove the matlab files? -- DONE
-	#. rework all files to match the new folder structure -- DONR 
-	#. make a yaml to run a configurable start.py so that only one setup.py is needed. 
 
 
