@@ -9,8 +9,8 @@ import numpy as np
 import src.complexpy as cp  # Implementation of complexpy
 
 # USAGE: from terminal window
-# python3 setup.py --xup "512 512" --xlow '-512 -511'
-# python3 setup.py --xup "512 512" --xlow '-512 -511' --objf 'src.testfunctions.objfunc5' -p
+# python3 setup.py --xup '512 512' --xlow '-512 -511'
+# python3 setup.py --xup '512 512' --xlow '-512 -511' --objf 'src.testfunctions.objfunc5' -p
 
 
 
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     default_samplingmethod_option = False # True for shuffling the initial sample. Does not really help?
 
     # relative to path of this file. Objective function definitions. more work to be done. see src/testfunctions. 
-    default_objfunc = "src.testfunctions.objfunc" 
+    default_objfunc = "src.testfunctions.objfunc2" 
     
     # n - How many runs do you want to run?
     default_n = 100 
@@ -125,9 +125,10 @@ if __name__ == "__main__":
                
             if conv>1:
                 c=c+1
-                if i==1:
+                
+            if i==1:
                     f_best, x_best, i_best = fmin, xmin, i
-                elif fmin < f_best:
+            elif fmin <= f_best:
                     f_best, x_best, i_best = fmin, xmin, i          
 
     """The Concurrent call to complexrf"""
@@ -140,12 +141,13 @@ if __name__ == "__main__":
             resultf = f.result()
             xmin,fmin,funcvector,allf,Iterations,conv,noofevaluations = resultf[0],resultf[1],resultf[2],resultf[3],resultf[4] ,resultf[5],resultf[6]
             i=i+1
-          
+            
             if conv>1:
                 c=c+1
-                if i==1:
+            
+            if i==1:
                         f_best, x_best, i_best = fmin, xmin, i
-                elif fmin < f_best:
+            elif fmin <= f_best:
                         f_best, x_best, i_best = fmin, xmin, i 
                 
             if (args.detailed == True):

@@ -159,7 +159,8 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
            if abs(abs(fmax)-abs(fmin)) <= TolFunc:
                 conv_cond = 1
                 break
-        if abs( ( abs(fmax)-abs(fmin) ) / abs(fmin) ) <= TolFunc:
+            
+        elif abs( ( abs(fmax)-abs(fmin) ) / abs(fmin) ) <= TolFunc:
                 conv_cond = 1
                 break
         
