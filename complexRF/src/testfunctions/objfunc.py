@@ -34,5 +34,12 @@ def install(x):
         return ObjVal
 
 if __name__ == "__main__":
-    x=np.array([1,1,1])
+    x=np.array([1,2,3])
+    print("\n",x)
     print(x,"Value= ",install(x)," and should be zero for x is zero for [1,1,1]")
+    number_list = [ x.item(i) for i in range(x.shape[0])]
+    number_list2 = [ x.item(i)+x.item(i+1) for i in range(x.shape[0]-1) if i < 2]
+
+    print(number_list)
+
+    print(number_list2)

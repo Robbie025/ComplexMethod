@@ -5,8 +5,8 @@ import time as t
 
 startime = t.perf_counter()
 
-def apply(func, xlow, xup,samplingmethod,option):  
-     return complexpy.complexpy_(func,xlow,xup,samplingmethod,option)  
+#def apply(func, xlow, xup,samplingmethod,option):  
+#     return complexpy.complexpy_(func,xlow,xup,samplingmethod,option)  
 
 """
 USER: The function definition.  
@@ -30,7 +30,7 @@ option=False
 
 # User: NE = number of complexpy calls.
 # For large number (NE>1000) try start_multip.py
-NE=200
+NE=100
 
 
 """
@@ -39,8 +39,8 @@ This was done for the Objfunc.py
 xlow=np.array([-2.048,-2.048])
 xup=np.array([2.048,2.048]
 """
-xlow=np.array([-15,-15])
-xup=np.array([15,15])
+xlow=np.array([-5,-5])
+xup=np.array([5,5])
 
 """
 Variables to prepare for printout

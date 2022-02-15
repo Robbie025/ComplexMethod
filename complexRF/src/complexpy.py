@@ -1,7 +1,23 @@
-import math,sys,random
-import numpy as np
-import src.sampling as sample_vector
+import importlib
+import math
 import pdb
+import random
+import sys
+import argparse
+
+import numpy as np
+
+try:
+  import src.sampling as sample_vector
+except:
+  import sampling as sample_vector
+
+
+
+
+
+
+
 
 def complex_func(func,x): #func,xup,xlow,maxeval,xstart):
     return func(x)
@@ -265,15 +281,77 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
  
     return x[fbestind,:], fmin, fminV, allf, Iterations, conv_cond, NoEvals
     
-def apply(func, xlow, xup ,samplingmethod="LHS"): 
+def apply(func, xlow, xup ,samplingmethod="LHS"): # Is this needed? Yes, probably from start.py.
      return complexpy_(func,xlow,xup,samplingmethod) 
          
 if __name__=="__main__":
-  import objfunc4 as obj
-  samplingmethod = "LHS"
-  funcname=obj.install
-  xlow=np.array([-512,-512])
-  xup=np.array([512,512])
+     
+    import sampling as sample_vector
 
-  xmin,fmin,funcVector,allf,Iterations,condition, NoEvaluations= apply(funcname,xlow,xup,samplingmethod)
-  print(xmin,fmin,Iterations) 
+    default_xlow = '-512 -512' # Default values for lower bound
+    default_xup =  '512 512'  # Default values for upper bound
+    default_samplingmethod = "Uniform"
+    default_samplingmethod_option = False
+    default_objfunc = "testfunctions.objfunc5"
+    default_n = 100
+    default_process = False # True for Multi-process. False for Single process. True good for large number (1000s) of runs. 
+    default_simple = True # If false, then all the results are printed to screen.
+    
+    samplingmethod = "LHS"
+     
+
+    parser = argparse.ArgumentParser(description='test function')
+    parser.add_argument('-l','--xlow', \
+        type=str, \
+            required=False, \
+                default = default_xlow, \
+                    help='Lower bound of the test function. This is a List; e.g.: [ -15, -15] ')
+                    
+    parser.add_argument('-u','--xup', \
+        type=str, \
+            required=False, \
+                default= default_xup, \
+                    help='Upper bound of the test function. This is a List; e.g.: [15, 15] ')
+
+    parser.add_argument('-n',\
+        required=False,\
+            default=default_n, \
+                type=int, \
+                    help ='Number of Runs of the complexRF')
+
+    parser.add_argument('-o',"--objf", \
+        type = str, \
+            required=False,\
+                default=default_objfunc,\
+                    help='Define where you have the objective function. Usually in the testfunction folder. e.g. src.testfunctions.objfunc')
+
+    parser.add_argument("--process", \
+        type = bool, \
+            required=False,\
+                default=default_process,\
+                    help='True for Multi-process. False for Single process. True good for large number (1000s) of runs. ')
+
+    parser.add_argument('-sp','--simple', \
+        type = bool, \
+            required=False,\
+                default=default_simple,\
+                    help='If false, then all the results are printed to screen.')
+    args = parser.parse_args()
+    
+    #Getting the objective function handler from the arguments
+    arg_function = args.objf    
+    objfuncHandle = importlib.import_module(arg_function, ".")
+    funcname = objfuncHandle.install
+
+    # python3 complexpy.py --xup "512 512" --xlow '-512 -511'
+    # python3 complexpy.py --xup "512 512" --xlow '-512 -511' --objf 'testfunctions.objfunc5'
+    
+    # Workaround to get the string xlow and xup into numpy arrays 
+    smallx,largex= (args.xlow).split(),(args.xup).split()
+    xup, xlow = np.zeros([len(largex)]), np.zeros([len(largex)])
+    for i in range(len(largex)):
+        xlow[i], xup[i] = smallx[i], largex[i]
+
+    #The ComplexRF method call.
+    xmin,fmin,funcVector,allf,Iterations,condition, NoEvaluations= complexpy_(funcname,xlow,xup,samplingmethod)
+    print(xmin,fmin,Iterations) 
