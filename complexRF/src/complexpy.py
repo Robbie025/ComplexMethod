@@ -1,22 +1,18 @@
+import argparse
 import importlib
 import math
 import pdb
 import random
 import sys
-import argparse
 
+import matplotlib.pyplot as plt
 import numpy as np
+
 
 try:
   import src.sampling as sample_vector
 except:
   import sampling as sample_vector
-
-
-
-
-
-
 
 
 def complex_func(func,x): #func,xup,xlow,maxeval,xstart):
@@ -51,21 +47,6 @@ def checkdesignlimits(xlow,xup,x):
     return x
     
 def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
-    """ The complexrf method 
-    
-    References
-    1. Box, M.J., "A new method of constrained optimization and a comparison with other method," 
-    Computer Journal, Vol. 8, No. 1, pp. 42-52, 1965.
-    
-    2. Andersson J, "Multiobjective Optimization in Engineering Design - Application to fluid Power Systems." 
-    Doctoral thesis, Division of Fluid and Mechanical Engineering Systems, Department of Mechanical Engineering, 
-    Linkping University, 2001 	
-
-    3. Krus P., Andersson J., Optimizing Optimization for Design Optimization, 
-    in Proceedings of ASME Design Automation Conference, Chicago, USA, September 2-6, 200i3
-  
-    4. Krus P., Olvander J., Performance Index and Meta Optimization of a Direct Search Optimization Method, Engineering Optimization, Volume 45, Issue 10, pp 1167-1185, 2013.   
-    """
 
     # Constants to be used in the complex algorithm
     
@@ -87,15 +68,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
     allx=[]
     allf=[]
 
-        
-    # Only for debug modes.
-    if samplingmethod == "Debug":
-        MaxEvals = 20  
-        debugnow = True    # True to run in debug mode
-        checkpdb = 1        # which iteration to print out debug values
-    else:
-        debugnow = False    # True to run in debug mode
-        checkpdb = 1        # which iteration to print out debug values
 
     # Number of optimization parameters
     Nparams = xlow.shape[0]  
@@ -145,15 +117,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
     # Start the complex search
     while NoEvals < MaxEvals: 
  
-        # This if statment is only valid in the debug mode. 
-        # This prints relevant values of variabless for a specific run. checkpdb=1 (see above).
-        if (Iterations == checkpdb)  and debugnow:
-            print("\n In the outer loop", NoEvals, Iterations)
-            print("\n x",x) 
-            print("\n f",f)
-            print("\n The f values will increase now")
-
-
         # Check for convergence of the function and parameter values
         if fmin == 0:
            if abs(abs(fmax)-abs(fmin)) <= TolFunc:
@@ -183,21 +146,12 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
         # Reflected point         
         x_1  = xc + ((xc-xworst) * Alfa)
 
-        if Iterations == checkpdb and debugnow:
-            print("\n Some inner checks")
-            print("\n xworst", xworst)
-            print("\n Reflected point x_1", x_1)
-            print("\n xc", xc)
-
  
 	    # Add some noise to the Reflected Point
         xmax,xmin = np.amax(x,0),np.amin(x,0)
         l1 = max( (xmax-xmin) / (xup-xlow) )
 
         ri = np.random.rand(Nparams)-0.5
-
-        if Iterations == checkpdb and debugnow:
-            ri = [-0.3, 0.5] # debug values. OR operator creates bad results
 
         x_11 = x_1 + (Rfak * (xup-xlow) * l1 * ri)
 
@@ -207,14 +161,6 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
         # Substiture the point back into the complex
         x[fworstind] = xnew[:] 
 
-        if Iterations == checkpdb and debugnow:
-            print("\n Outer loop inner checks")
-            print("\n xup-xlow",xup-xlow)
-            print("\n Rfak * (xup-xlow) * l1",Rfak * (xup-xlow) * l1)
-            print("\n Rfak * (xup-xlow) * l1 *  ri", Rfak * (xup-xlow) * l1 * ri)
-            print("\n x_11 + above", x_1 + Rfak * (xup-xlow) * l1 * ri)
-            print("\n xnew", xnew)
-
         # Updating f with the reflected point        
         f[fworstind,0] = complex_func(obj,xnew[:])  # update function value of the new point
         NoEvals += 1 # update number of evaluations
@@ -222,31 +168,16 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
         fworstind_new,fbestind_new = f.argmax(), f.argmin() # Update worst and best indice in the function space
         xworst,xbest = x[fworstind_new,:], x[fbestind_new,:]
         
-        # Redo the reflection, if the reflected point remains the worst point 
-        if Iterations == checkpdb and debugnow:
-            print("\n Checks before inner loop")
-            print("\n NoEvals, Iterations", NoEvals, Iterations)
-            print("\n x",x)
-            print("\n f",f)
 
         itera=0
         while (fworstind_new == fworstind) and (itera < IterMax) and (NoEvals < MaxEvals):  
             a = 1 - math.exp(-1.0*itera/b)
 
-            if Iterations == checkpdb and debugnow:
-                print("\n Inner loop:")
-                print("\n xnew,NoEvals",xnew,NoEvals)
-                print("\n Evals and itera" , NoEvals, itera)
-                print("\n fworstind & fworstind_new", fworstind, fworstind_new)
-                print("\n a", a)
-           
+         
             xmax,xmin = np.amax(x,0),np.amin(x,0)
             l1 = np.array(max( (xmax -xmin) / (xup-xlow) ))
             ri = np.random.rand(Nparams) - 0.5
             
-            if Iterations == checkpdb and debugnow: # Some print for debug mode.
-                ri = [-0.3, 0.5, 0.5] # debug values 
-
             x_11 = (Rfak * (xup-xlow)) * l1*ri
             xnew_ =  ( ( (xc*(1.0-a) + xbest * a) + xnew) * 0.5 ) + x_11
             
@@ -254,16 +185,7 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
             xnew = checkdesignlimits(xlow,xup,np.array(xnew_))
             x[fworstind,:] = xnew[:]
 
-            if Iterations == checkpdb and debugnow:
-                print("\n Inner working of the inner loop")
-                print("\n max( (xmax -xmin)/(xup-xlow) )", max( (xmax -xmin)/(xup-xlow) ))
-                print("\n (Rfak * (xup-xlow)) ", (Rfak * (xup-xlow)))
-                print("\n (Rfak * (xup-xlow)) * l1 * ri", (Rfak * (xup-xlow)) * l1 * ri)
-                print("\n ( (xc*(1.0-a) + xbest * a) + xnew) * 0.5 ", ( (xc*(1.0-a) + xbest * a) + xnew) * 0.5)  
-                print("\n xnew ", xnew)
-                print("\n xnew_", xnew_)
-
-            # Updating f with the reflected point
+             # Updating f with the reflected point
             f[fworstind,:] = complex_func(obj,xnew)
             NoEvals += 1
 
@@ -278,81 +200,23 @@ def complexpy_(obj,xlow,xup,samplingmethod="LHS",optionsample=False):
         xappend = np.hstack( (x[fbestind], l1 ) )
         allx = np.vstack( (allx, xappend ) )
         fminV = np.vstack( (fminV, fmin ) )
-
  
     return x[fbestind,:], fmin, fminV, allf, Iterations, conv_cond, NoEvals
-    
-def apply(func, xlow, xup ,samplingmethod="LHS"): # Is this needed? Yes, probably from start.py.
-     return complexpy_(func,xlow,xup,samplingmethod) 
-         
+      
 if __name__=="__main__":
-     
-    import sampling as sample_vector
-
-    default_xlow = '-512 -512' # Default values for lower bound
-    default_xup =  '512 512'  # Default values for upper bound
-    default_samplingmethod = "Uniform"
-    default_samplingmethod_option = False
-    default_objfunc = "testfunctions.objfunc5"
-    default_n = 100
-    default_process = False # True for Multi-process. False for Single process. True good for large number (1000s) of runs. 
-    default_simple = True # If false, then all the results are printed to screen.
-    
+    from testfunctions import objfunc
+    xlow = np.array([ -1.2, -1.2 ])
+    xup = np.array([1.2,1.2 ])
+    funcname = objfunc.install    
     samplingmethod = "LHS"
-     
+    option=False
 
-    parser = argparse.ArgumentParser(description='test function')
-    parser.add_argument('-l','--xlow', \
-        type=str, \
-            required=False, \
-                default = default_xlow, \
-                    help='Lower bound of the test function. This is a List; e.g.: [ -15, -15] ')
-                    
-    parser.add_argument('-u','--xup', \
-        type=str, \
-            required=False, \
-                default= default_xup, \
-                    help='Upper bound of the test function. This is a List; e.g.: [15, 15] ')
+    np.set_printoptions(precision=3)
+    print("{:12}".format("No."), '{:15}'.format("xmin"), "{:8}".format("fmin"), "{:12}".format("Iterations"), "{:7}".format("Evals"), "{:4}".format("conv") ) 
+    xmin,fmin,funcVector,allf,Iterations,conv,noofevaluations=  complexpy_(funcname,xlow,xup,samplingmethod,option)
+    print("{:4}".format(1), '{:>17}'.format(np.array2string(xmin)), "{:>12}".format(np.array2string(fmin)),"{:8}".format(Iterations), "{:10}".format(noofevaluations), "{:4}".format(conv) ) 
 
-    parser.add_argument('-n',\
-        required=False,\
-            default=default_n, \
-                type=int, \
-                    help ='Number of Runs of the complexRF')
-
-    parser.add_argument('-o',"--objf", \
-        type = str, \
-            required=False,\
-                default=default_objfunc,\
-                    help='Define where you have the objective function. Usually in the testfunction folder. e.g. src.testfunctions.objfunc')
-
-    parser.add_argument("--process", \
-        type = bool, \
-            required=False,\
-                default=default_process,\
-                    help='True for Multi-process. False for Single process. True good for large number (1000s) of runs. ')
-
-    parser.add_argument('-sp','--simple', \
-        type = bool, \
-            required=False,\
-                default=default_simple,\
-                    help='If false, then all the results are printed to screen.')
-    args = parser.parse_args()
-    
-    #Getting the objective function handler from the arguments
-    arg_function = args.objf    
-    objfuncHandle = importlib.import_module(arg_function, ".")
-    funcname = objfuncHandle.install
-
-    # python3 complexpy.py --xup "512 512" --xlow '-512 -511'
-    # python3 complexpy.py --xup "512 512" --xlow '-512 -511' --objf 'testfunctions.objfunc5'
-    
-    # Workaround to get the string xlow and xup into numpy arrays 
-    smallx,largex= (args.xlow).split(),(args.xup).split()
-    xup, xlow = np.zeros([len(largex)]), np.zeros([len(largex)])
-    for i in range(len(largex)):
-        xlow[i], xup[i] = smallx[i], largex[i]
-
-    #The ComplexRF method call.
-    xmin,fmin,funcVector,allf,Iterations,condition, NoEvaluations= complexpy_(funcname,xlow,xup,samplingmethod)
-    print(xmin,fmin,Iterations) 
+    line, = plt.plot(funcVector, '--', linewidth=2)
+    dashes = [10, 5, 100, 5] 
+    line.set_dashes(dashes)
+    plt.show()

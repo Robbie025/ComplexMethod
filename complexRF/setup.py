@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # Default values for upper bound  e.g. '512.0 512.0'
     default_xup =  '5.0 5.0'  
     
-    # Sampling method. Two option right now: Uniform, LHC, DEBUG. Debug not implemented
+    # Sampling method. Two option right now: Uniform, LHC.
     default_samplingmethod = 'uniform'
     default_samplingmethod_option = False # True for shuffling the initial sample. Does not really help?
 
@@ -65,7 +65,7 @@ if __name__ == "__main__":
                     help ='Number of Runs of the complexRF')
 
     parser.add_argument('--sample', \
-        choices = ['uniform','LHS','debug'], \
+        choices = ['uniform','LHS'], \
             type = str, \
                 required=False,\
                     default = default_samplingmethod, \
@@ -91,36 +91,30 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-
     #Getting the objective function handler from the arguments
     arg_function = args.objf    
     objfuncHandle = importlib.import_module(arg_function, ".")
     funcname = objfuncHandle.install # User might want to change this if they have a different name for function call.
-  
-    
+      
     # Workaround to get the string xlow and xup into numpy arrays 
     smallx, largex= (args.xlow).split(), (args.xup).split()
     xlow, xup = np.zeros([len(smallx)]), np.zeros([len(largex)])
     for i in range(len(largex)):
         xlow[i], xup[i] = smallx[i], largex[i]
  
-
     i, c = 0, 0 # i is counter for number of runs; c is the number of converged runs
     startime = t.perf_counter()
 
     samplingmethod = args.sample
     option=False
-
     
     """The sequential call to complexrf"""
     if (not args.process):          
-        i=0
+
         for i in range(1,args.n+1):
             xmin,fmin,funcVector,allf,Iterations,conv,noofevaluations=  cp.complexpy_(funcname,xlow,xup,samplingmethod,option)
 
             if (args.detailed == True): # Print all values only for -d flag
-                
-
                 printouttoterminal(i,xmin,fmin,Iterations,noofevaluations,conv)
                
             if conv>1:
