@@ -7,10 +7,8 @@ Contents:
    :maxdepth: 2
    :numbered:
 
-   Work
-   SoftwarePrerequisites
-   ComplexMethodPython
-   ComplexMethodMatlab
+   howtouse   
+   ComplexMethodPython      
    Description
    Contact
 
