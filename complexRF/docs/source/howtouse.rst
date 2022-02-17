@@ -73,7 +73,7 @@ Python
 
 A version of complex method written in python  is available in the git repository in the folder *python*.
 
-Links to install python and numpy:
+Links to install python, numpy and matplotlib:
 
 
 	| https://www.python.org/downloads/
@@ -103,12 +103,8 @@ Remember that latex must be installed for building the math equations. For ubunt
 	$ sudo apt-get install texlive-full
 
 
-Matlab
-------
-You need Matlab from mathworks to run the matlab version of the code. The python version does not require matlab.  
 
 
-	https://www.mathworks.com/
 
 
 More Information

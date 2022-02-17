@@ -1,10 +1,14 @@
-ComplexMethod
+ComplexMethod - RF
 =============
 
-Read the docs link
+The Complexrf is a optimization algorithm, similar in functionality to simplex method or the genetic algorithms. This python implementation comes with some common test functions and documentation. The python package has been tested only on linux (wsl) and windows 10.
+  
+
+Documentation link
   ::
 
         http://complexmethod.readthedocs.org/ 
+
 
 References
 ==========
